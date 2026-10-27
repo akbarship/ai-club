@@ -1,11 +1,18 @@
-import { Bot, InlineKeyboard, InputFile } from 'grammy';
-import { join } from 'node:path';
-import { config } from './config.ts';
+import { Bot, InlineKeyboard } from 'grammy';
+import { config } from './config';
 
-export const bot = new Bot(config.botToken);
+const g = globalThis as unknown as { __aiClubBot?: Bot };
+// "missing" lets the app boot without a token so pages and errors render; Telegram calls will fail.
+export const bot =
+  g.__aiClubBot ??
+  (g.__aiClubBot = new Bot(config.botToken || 'missing', { client: { apiRoot: config.telegramApiRoot } }));
 
-/** Filled in at startup from getMe(). */
-export const botInfo = { username: '' };
+/** The bot's @username, needed for share links. Fetched once per server instance. */
+export async function botUsername(): Promise<string> {
+  if (config.botUsername) return config.botUsername;
+  if (!bot.isInited()) await bot.init().catch(() => {});
+  return bot.isInited() ? bot.botInfo.username : '';
+}
 
 export type MsgButton = { text: string; type: 'app' | 'url' | 'channel'; value?: string };
 
@@ -28,17 +35,14 @@ export function buildKeyboard(buttons: MsgButton[]): InlineKeyboard | undefined 
   return kb;
 }
 
-/** Uploaded images are sent as files; external URLs are passed through to Telegram. */
-export function photoInput(url: string): string | InputFile {
-  if (url.startsWith('/uploads/')) return new InputFile(join(config.dataDir, url));
-  return url;
-}
+/** Telegram fetches photos by URL; app-relative paths (e.g. /author.png) are made absolute. */
+export const absoluteUrl = (url: string) => (url.startsWith('/') ? config.webappUrl + url : url);
 
 /** Sends text or a photo with caption + keyboard to a chat. */
 export async function sendRich(chatId: number, text: string, photoUrl: string | null | undefined, buttons: MsgButton[]) {
   const reply_markup = buildKeyboard(buttons);
   if (photoUrl) {
-    return bot.api.sendPhoto(chatId, photoInput(photoUrl), { caption: text, parse_mode: 'HTML', reply_markup });
+    return bot.api.sendPhoto(chatId, absoluteUrl(photoUrl), { caption: text, parse_mode: 'HTML', reply_markup });
   }
   return bot.api.sendMessage(chatId, text, {
     parse_mode: 'HTML',

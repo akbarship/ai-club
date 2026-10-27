@@ -1,11 +1,8 @@
 import { Hono, type Context, type Next } from 'hono';
-import { randomBytes } from 'node:crypto';
-import { writeFile } from 'node:fs/promises';
-import { join } from 'node:path';
-import { validateInitData } from './auth.ts';
-import { audienceSize, AUDIENCES, runQueue } from './broadcast.ts';
-import { escapeHtml, notifyAdmins } from './bot.ts';
-import { config, isAdmin } from './config.ts';
+import { validateInitData } from './auth';
+import { audienceSize, AUDIENCES, stepBroadcast } from './broadcast';
+import { escapeHtml, notifyAdmins } from './bot';
+import { config, isAdmin } from './config';
 import {
   all,
   getSettings,
@@ -18,10 +15,11 @@ import {
   settingDefaults,
   upsertUser,
   type Row,
-} from './db.ts';
-import { detailed } from './stats.ts';
-import { checkSubscription } from './subscription.ts';
-import { botInfo } from './telegram.ts';
+} from './db';
+import { detailed } from './stats';
+import { checkSubscription } from './subscription';
+import { uploadImage } from './storage';
+import { botUsername, sendRich } from './telegram';
 
 type Env = { Variables: { userId: number; startParam?: string } };
 export const api = new Hono<Env>();
@@ -38,14 +36,14 @@ api.use('*', async (c, next) => {
   const raw = header.startsWith('tma ') ? header.slice(4) : '';
   const data = raw ? validateInitData(raw) : null;
   if (data) {
-    upsertUser(data.user);
+    await upsertUser(data.user);
     c.set('userId', data.user.id);
     c.set('startParam', data.startParam);
     return next();
   }
   // Local development in a normal browser (never in production).
   if (!raw && !config.isProd && config.devUserId) {
-    upsertUser({ id: config.devUserId, first_name: 'Dev', username: 'dev' });
+    await upsertUser({ id: config.devUserId, first_name: 'Dev', username: 'dev' });
     c.set('userId', config.devUserId);
     return next();
   }
@@ -63,7 +61,7 @@ type Viewer = { id: number; subscribed: boolean; club: boolean; admin: boolean }
 
 async function viewer(c: Context<Env>): Promise<Viewer> {
   const id = c.get('userId');
-  const u = getUser(id)!;
+  const u = (await getUser(id))!;
   const admin = isAdmin(id);
   return { id, admin, club: !!u.is_club, subscribed: admin || (await checkSubscription(id)) };
 }
@@ -93,7 +91,7 @@ const teaser = (p: Row, v: Viewer) => {
   };
 };
 
-function activeBanners() {
+async function activeBanners() {
   const t = now();
   return all(
     `SELECT id, eyebrow, title, subtitle, image_url, bg, cta_label, action_type, action_value FROM banners
@@ -109,25 +107,29 @@ function activeBanners() {
 api.post('/session', async (c) => {
   const id = c.get('userId');
   const startParam = c.get('startParam');
-  const u = getUser(id)!;
-  if (!u.first_app_open_at) run('UPDATE users SET first_app_open_at = ? WHERE id = ?', now(), id);
-  if (!u.source && startParam) run('UPDATE users SET source = ? WHERE id = ?', `app:${startParam}`, id);
-  logEvent(id, 'app_open', startParam ?? null);
+  const u = (await getUser(id))!;
+  if (!u.first_app_open_at) await run('UPDATE users SET first_app_open_at = ? WHERE id = ?', now(), id);
+  if (!u.source && startParam) await run('UPDATE users SET source = ? WHERE id = ?', `app:${startParam}`, id);
+  await logEvent(id, 'app_open', startParam ?? null);
 
-  const v = await viewer(c);
-  const s = getSettings();
+  const [v, s, waitlist, username] = await Promise.all([
+    viewer(c),
+    getSettings(),
+    all<{ product: string }>('SELECT product FROM waitlist WHERE user_id = ?', id),
+    botUsername(),
+  ]);
   return c.json({
     user: { id, first_name: u.first_name, last_name: u.last_name, username: u.username, photo_url: u.photo_url },
     subscribed: v.subscribed,
     club: v.club,
     admin: v.admin,
     channelUrl: config.channelUrl,
-    botUsername: botInfo.username,
+    botUsername: username,
     channelTitle: s.channel_title,
     gateText: s.gate_text,
     author: { name: s.author_name, avatar: s.author_avatar || null },
     brandTitle: s.brand_title,
-    waitlist: all<{ product: string }>('SELECT product FROM waitlist WHERE user_id = ?', id).map((r) => r.product),
+    waitlist: waitlist.map((r) => r.product),
   });
 });
 
@@ -139,19 +141,19 @@ api.post('/subscription/check', async (c) => {
 api.get('/home', async (c) => {
   const v = await viewer(c);
   const type = c.req.query('type');
-  const posts = all(
+  const posts = await all(
     `SELECT * FROM posts WHERE status = 'published' ${POST_TYPES.includes(type ?? '') ? 'AND type = ?' : ''}
      ORDER BY pinned DESC, published_at DESC LIMIT 200`,
     ...(POST_TYPES.includes(type ?? '') ? [type] : []),
   );
-  return c.json({ banners: activeBanners(), posts: posts.map((p) => teaser(p, v)) });
+  return c.json({ banners: await activeBanners(), posts: posts.map((p) => teaser(p, v)) });
 });
 
 api.get('/posts/:id', async (c) => {
   const v = await viewer(c);
-  const p = one('SELECT * FROM posts WHERE id = ?', Number(c.req.param('id')));
+  const p = await one('SELECT * FROM posts WHERE id = ?', Number(c.req.param('id')) || 0);
   if (!p || (p.status !== 'published' && !v.admin)) return c.json({ error: 'not_found' }, 404);
-  logEvent(v.id, 'post_view', String(p.id));
+  await logEvent(v.id, 'post_view', String(p.id));
   const t = teaser(p, v);
   if (t.locked) return c.json(t);
   return c.json({ ...t, body: p.body, link_url: p.link_url, install: p.install });
@@ -160,12 +162,12 @@ api.get('/posts/:id', async (c) => {
 api.post('/events', async (c) => {
   const { type, ref } = await c.req.json<{ type: string; ref?: string }>();
   if (!CLIENT_EVENTS.includes(type)) return c.json({ error: 'bad_event' }, 400);
-  logEvent(c.get('userId'), type, ref ? String(ref).slice(0, 64) : null);
+  await logEvent(c.get('userId'), type, ref ? String(ref).slice(0, 64) : null);
   return c.json({ ok: true });
 });
 
-api.get('/pitch', (c) => {
-  const s = getSettings();
+api.get('/pitch', async (c) => {
+  const s = await getSettings();
   return c.json({ club: s.club_pitch, course: s.course_pitch });
 });
 
@@ -173,21 +175,26 @@ api.post('/waitlist/:product', async (c) => {
   const product = c.req.param('product');
   if (!PRODUCTS.includes(product)) return c.json({ error: 'bad_product' }, 400);
   const id = c.get('userId');
-  const res = run('INSERT OR IGNORE INTO waitlist (user_id, product, created_at) VALUES (?, ?, ?)', id, product, now());
-  if (res.changes) {
-    logEvent(id, 'waitlist', product);
-    const u = getUser(id)!;
+  const res = await run(
+    'INSERT INTO waitlist (user_id, product, created_at) VALUES (?, ?, ?) ON CONFLICT DO NOTHING',
+    id,
+    product,
+    now(),
+  );
+  if (res.count) {
+    await logEvent(id, 'waitlist', product);
+    const u = (await getUser(id))!;
     const name = escapeHtml([u.first_name, u.last_name].filter(Boolean).join(' ') || String(id));
-    const total = one<{ c: number }>('SELECT COUNT(*) c FROM waitlist WHERE product = ?', product)!.c;
-    notifyAdmins(
+    const total = (await one<{ c: number }>('SELECT COUNT(*) c FROM waitlist WHERE product = ?', product))!.c;
+    await notifyAdmins(
       `Yangi waitlist (${product}): <a href="tg://user?id=${id}">${name}</a>${u.username ? ` @${u.username}` : ''}\nJami: <b>${total}</b>`,
     );
   }
   return c.json({ ok: true });
 });
 
-api.delete('/waitlist/:product', (c) => {
-  run('DELETE FROM waitlist WHERE user_id = ? AND product = ?', c.get('userId'), c.req.param('product'));
+api.delete('/waitlist/:product', async (c) => {
+  await run('DELETE FROM waitlist WHERE user_id = ? AND product = ?', c.get('userId'), c.req.param('product'));
   return c.json({ ok: true });
 });
 
@@ -196,9 +203,9 @@ api.delete('/waitlist/:product', (c) => {
 const admin = new Hono<Env>();
 admin.use('*', adminOnly);
 
-admin.get('/meta', (c) => c.json({ botUsername: botInfo.username, webappUrl: config.webappUrl }));
+admin.get('/meta', async (c) => c.json({ botUsername: await botUsername(), webappUrl: config.webappUrl }));
 
-admin.get('/stats', (c) => c.json(detailed(Number(c.req.query('days') ?? 30))));
+admin.get('/stats', async (c) => c.json(await detailed(Number(c.req.query('days') ?? 30))));
 
 // posts
 const postFields = (b: Row) => {
@@ -218,45 +225,45 @@ const postFields = (b: Row) => {
   };
 };
 
-admin.get('/posts', (c) =>
+admin.get('/posts', async (c) =>
   c.json(
-    all(
+    await all(
       `SELECT p.id, p.type, p.title, p.access, p.status, p.pinned, p.updated_at, p.published_at,
               (SELECT COUNT(DISTINCT user_id) FROM events e WHERE e.type = 'post_view' AND e.ref = CAST(p.id AS TEXT)) views
        FROM posts p ORDER BY p.pinned DESC, p.updated_at DESC`,
     ),
   ),
 );
-admin.get('/posts/:id', (c) => {
-  const p = one('SELECT * FROM posts WHERE id = ?', Number(c.req.param('id')));
+admin.get('/posts/:id', async (c) => {
+  const p = await one('SELECT * FROM posts WHERE id = ?', Number(c.req.param('id')) || 0);
   return p ? c.json(p) : c.json({ error: 'not_found' }, 404);
 });
 admin.post('/posts', async (c) => {
   const f = postFields(await c.req.json());
   const t = now();
-  const r = run(
+  const r = await run(
     `INSERT INTO posts (type, title, summary, body, cover_url, link_url, install, tags, access, status, pinned, created_at, updated_at, published_at)
-     VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+     VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?) RETURNING id`,
     f.type, f.title, f.summary, f.body, f.cover_url, f.link_url, f.install, f.tags, f.access, f.status, f.pinned, t, t,
     f.status === 'published' ? t : null,
   );
-  return c.json({ id: Number(r.lastInsertRowid) });
+  return c.json({ id: r.rows[0].id });
 });
 admin.put('/posts/:id', async (c) => {
   const id = Number(c.req.param('id'));
   const f = postFields(await c.req.json());
-  run(
+  await run(
     `UPDATE posts SET type = ?, title = ?, summary = ?, body = ?, cover_url = ?, link_url = ?, install = ?, tags = ?,
        access = ?, status = ?, pinned = ?, updated_at = ?,
-       published_at = CASE WHEN ? = 'published' THEN COALESCE(published_at, ?) ELSE published_at END
+       published_at = CASE WHEN ?::text = 'published' THEN COALESCE(published_at, ?::bigint) ELSE published_at END
      WHERE id = ?`,
     f.type, f.title, f.summary, f.body, f.cover_url, f.link_url, f.install, f.tags, f.access, f.status, f.pinned, now(),
     f.status, now(), id,
   );
   return c.json({ id });
 });
-admin.delete('/posts/:id', (c) => {
-  run('DELETE FROM posts WHERE id = ?', Number(c.req.param('id')));
+admin.delete('/posts/:id', async (c) => {
+  await run('DELETE FROM posts WHERE id = ?', Number(c.req.param('id')));
   return c.json({ ok: true });
 });
 
@@ -275,18 +282,18 @@ const bannerFields = (b: Row) => [
   b.starts_at ? Number(b.starts_at) : null,
   b.ends_at ? Number(b.ends_at) : null,
 ];
-admin.get('/banners', (c) => c.json(all('SELECT * FROM banners ORDER BY sort, id DESC')));
+admin.get('/banners', async (c) => c.json(await all('SELECT * FROM banners ORDER BY sort, id DESC')));
 admin.post('/banners', async (c) => {
-  const r = run(
+  const r = await run(
     `INSERT INTO banners (eyebrow, title, subtitle, image_url, bg, cta_label, action_type, action_value, active, sort, starts_at, ends_at, created_at)
-     VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+     VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?) RETURNING id`,
     ...bannerFields(await c.req.json()),
     now(),
   );
-  return c.json({ id: Number(r.lastInsertRowid) });
+  return c.json({ id: r.rows[0].id });
 });
 admin.put('/banners/:id', async (c) => {
-  run(
+  await run(
     `UPDATE banners SET eyebrow = ?, title = ?, subtitle = ?, image_url = ?, bg = ?, cta_label = ?, action_type = ?,
        action_value = ?, active = ?, sort = ?, starts_at = ?, ends_at = ? WHERE id = ?`,
     ...bannerFields(await c.req.json()),
@@ -294,8 +301,8 @@ admin.put('/banners/:id', async (c) => {
   );
   return c.json({ ok: true });
 });
-admin.delete('/banners/:id', (c) => {
-  run('DELETE FROM banners WHERE id = ?', Number(c.req.param('id')));
+admin.delete('/banners/:id', async (c) => {
+  await run('DELETE FROM banners WHERE id = ?', Number(c.req.param('id')));
   return c.json({ ok: true });
 });
 
@@ -314,30 +321,30 @@ const keywordFields = (b: Row) => {
     b.active ? 1 : 0,
   ];
 };
-admin.get('/keywords', (c) =>
+admin.get('/keywords', async (c) =>
   c.json(
-    all(
+    (await all(
       `SELECT k.*, (SELECT COUNT(*) FROM events e WHERE e.type = 'keyword' AND e.ref = k.keyword) hits,
               (SELECT COUNT(*) FROM users u WHERE u.source = k.keyword) users
        FROM keywords k ORDER BY k.id DESC`,
-    ).map((k) => ({ ...k, buttons: JSON.parse(k.buttons) })),
+    )).map((k) => ({ ...k, buttons: JSON.parse(k.buttons) })),
   ),
 );
 admin.post('/keywords', async (c) => {
   try {
-    const r = run(
-      `INSERT INTO keywords (keyword, match_text, response_text, photo_url, buttons, active, created_at) VALUES (?, ?, ?, ?, ?, ?, ?)`,
+    const r = await run(
+      `INSERT INTO keywords (keyword, match_text, response_text, photo_url, buttons, active, created_at) VALUES (?, ?, ?, ?, ?, ?, ?) RETURNING id`,
       ...keywordFields(await c.req.json()),
       now(),
     );
-    return c.json({ id: Number(r.lastInsertRowid) });
+    return c.json({ id: r.rows[0].id });
   } catch (e) {
     return c.json({ error: friendlyError(e) }, 400);
   }
 });
 admin.put('/keywords/:id', async (c) => {
   try {
-    run(
+    await run(
       `UPDATE keywords SET keyword = ?, match_text = ?, response_text = ?, photo_url = ?, buttons = ?, active = ? WHERE id = ?`,
       ...keywordFields(await c.req.json()),
       Number(c.req.param('id')),
@@ -347,14 +354,13 @@ admin.put('/keywords/:id', async (c) => {
     return c.json({ error: friendlyError(e) }, 400);
   }
 });
-admin.delete('/keywords/:id', (c) => {
-  run('DELETE FROM keywords WHERE id = ?', Number(c.req.param('id')));
+admin.delete('/keywords/:id', async (c) => {
+  await run('DELETE FROM keywords WHERE id = ?', Number(c.req.param('id')));
   return c.json({ ok: true });
 });
 admin.post('/keywords/:id/test', async (c) => {
-  const k = one('SELECT * FROM keywords WHERE id = ?', Number(c.req.param('id')));
+  const k = await one('SELECT * FROM keywords WHERE id = ?', Number(c.req.param('id')) || 0);
   if (!k) return c.json({ error: 'not_found' }, 404);
-  const { sendRich } = await import('./telegram.ts');
   try {
     await sendRich(c.get('userId'), k.response_text, k.photo_url, JSON.parse(k.buttons));
     return c.json({ ok: true });
@@ -364,9 +370,9 @@ admin.post('/keywords/:id/test', async (c) => {
 });
 
 // broadcasts
-admin.get('/broadcasts', (c) => c.json(all('SELECT * FROM broadcasts ORDER BY id DESC LIMIT 50')));
-admin.get('/broadcasts/audience', (c) =>
-  c.json(Object.fromEntries(Object.keys(AUDIENCES).map((a) => [a, audienceSize(a)]))),
+admin.get('/broadcasts', async (c) => c.json(await all('SELECT * FROM broadcasts ORDER BY id DESC LIMIT 50')));
+admin.get('/broadcasts/audience', async (c) =>
+  c.json(Object.fromEntries(await Promise.all(Object.keys(AUDIENCES).map(async (a) => [a, await audienceSize(a)])))),
 );
 admin.post('/broadcasts', async (c) => {
   const b = await c.req.json();
@@ -374,7 +380,6 @@ admin.post('/broadcasts', async (c) => {
   const audience = b.audience in AUDIENCES ? b.audience : 'all';
   const buttons = JSON.stringify(Array.isArray(b.buttons) ? b.buttons : []);
   if (b.test) {
-    const { sendRich } = await import('./telegram.ts');
     try {
       await sendRich(c.get('userId'), b.text, b.photo_url || null, JSON.parse(buttons));
       return c.json({ ok: true });
@@ -382,30 +387,31 @@ admin.post('/broadcasts', async (c) => {
       return c.json({ error: (e as Error).message }, 400);
     }
   }
-  const r = run(
-    `INSERT INTO broadcasts (text, photo_url, buttons, audience, created_at) VALUES (?, ?, ?, ?, ?)`,
+  const r = await run(
+    `INSERT INTO broadcasts (text, photo_url, buttons, audience, created_at) VALUES (?, ?, ?, ?, ?) RETURNING id`,
     b.text, b.photo_url || null, buttons, audience, now(),
   );
-  runQueue();
-  return c.json({ id: Number(r.lastInsertRowid) });
+  return c.json({ id: r.rows[0].id });
 });
+// The admin page calls this repeatedly until the broadcast reports status "done".
+admin.post('/broadcasts/:id/step', async (c) => c.json(await stepBroadcast(Number(c.req.param('id')) || 0)));
 
 // users
-admin.get('/users', (c) => {
+admin.get('/users', async (c) => {
   const q = (c.req.query('q') ?? '').trim().replace(/^@/, '');
   const filter = c.req.query('filter') ?? 'all';
   const where: string[] = [];
   const params: any[] = [];
   if (q) {
-    where.push(`(CAST(id AS TEXT) = ? OR username LIKE ? OR first_name LIKE ? OR last_name LIKE ?)`);
+    where.push(`(id::text = ? OR username ILIKE ? OR first_name ILIKE ? OR last_name ILIKE ?)`);
     params.push(q, `%${q}%`, `%${q}%`, `%${q}%`);
   }
   if (filter === 'club') where.push('is_club = 1');
   if (filter === 'waitlist') where.push('id IN (SELECT user_id FROM waitlist)');
   if (filter === 'subscribed') where.push('is_subscribed = 1');
   if (filter === 'blocked') where.push('blocked_at IS NOT NULL');
-  const rows = all(
-    `SELECT u.*, (SELECT GROUP_CONCAT(product) FROM waitlist w WHERE w.user_id = u.id) waitlist
+  const rows = await all(
+    `SELECT u.*, (SELECT string_agg(product, ',') FROM waitlist w WHERE w.user_id = u.id) waitlist
      FROM users u ${where.length ? 'WHERE ' + where.join(' AND ') : ''}
      ORDER BY COALESCE(last_seen_at, created_at) DESC LIMIT 100`,
     ...params,
@@ -414,40 +420,33 @@ admin.get('/users', (c) => {
 });
 admin.patch('/users/:id', async (c) => {
   const b = await c.req.json();
-  run('UPDATE users SET is_club = ? WHERE id = ?', b.is_club ? 1 : 0, Number(c.req.param('id')));
+  await run('UPDATE users SET is_club = ? WHERE id = ?', b.is_club ? 1 : 0, Number(c.req.param('id')) || 0);
   return c.json({ ok: true });
 });
 
 // settings
-admin.get('/settings', (c) => c.json(getSettings()));
+admin.get('/settings', async (c) => c.json(await getSettings()));
 admin.put('/settings', async (c) => {
   const b = await c.req.json();
-  for (const key of Object.keys(settingDefaults)) if (typeof b[key] === 'string') setSetting(key, b[key]);
-  return c.json(getSettings());
+  for (const key of Object.keys(settingDefaults)) if (typeof b[key] === 'string') await setSetting(key, b[key]);
+  return c.json(await getSettings());
 });
 
-// uploads
-const IMAGE_EXT: Record<string, string> = {
-  'image/jpeg': 'jpg',
-  'image/png': 'png',
-  'image/webp': 'webp',
-  'image/gif': 'gif',
-};
+// uploads (Supabase Storage)
 admin.post('/upload', async (c) => {
   const body = await c.req.parseBody();
   const file = body.file;
   if (!(file instanceof File)) return c.json({ error: 'Fayl topilmadi' }, 400);
-  const ext = IMAGE_EXT[file.type];
-  if (!ext) return c.json({ error: 'Faqat JPG, PNG, WEBP yoki GIF' }, 400);
-  if (file.size > 10 * 1024 * 1024) return c.json({ error: 'Fayl 10 MB dan katta' }, 400);
-  const name = `${Date.now().toString(36)}-${randomBytes(4).toString('hex')}.${ext}`;
-  await writeFile(join(config.dataDir, 'uploads', name), Buffer.from(await file.arrayBuffer()));
-  return c.json({ url: `/uploads/${name}` });
+  try {
+    return c.json({ url: await uploadImage(file) });
+  } catch (e) {
+    return c.json({ error: (e as Error).message }, 400);
+  }
 });
 
 api.route('/admin', admin);
 
 function friendlyError(e: unknown) {
   const m = (e as Error).message ?? String(e);
-  return m.includes('UNIQUE') ? "Bunday kalit so'z allaqachon mavjud" : m;
+  return m.includes('duplicate key') ? "Bunday kalit so'z allaqachon mavjud" : m;
 }

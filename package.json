@@ -2,17 +2,34 @@
   "name": "ai-club",
   "private": true,
   "type": "module",
-  "workspaces": [
-    "server",
-    "web"
-  ],
   "scripts": {
-    "dev": "concurrently -n server,web -c blue,magenta \"npm run dev -w server\" \"npm run dev -w web\"",
-    "build": "npm run build -w web",
-    "start": "npm start -w server",
-    "typecheck": "npm run typecheck -w server && npm run typecheck -w web"
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "typecheck": "tsc --noEmit",
+    "db:setup": "tsx --env-file-if-exists=.env scripts/db-setup.ts",
+    "import": "tsx --env-file-if-exists=.env scripts/import-articles.ts",
+    "bot:setup": "tsx --env-file-if-exists=.env scripts/bot-setup.ts",
+    "bot:poll": "tsx --env-file-if-exists=.env scripts/bot-poll.ts"
+  },
+  "dependencies": {
+    "@solar-icons/react": "^2.3.3",
+    "@supabase/supabase-js": "^2.118.0",
+    "dompurify": "^3.4.17",
+    "grammy": "^1.46.0",
+    "hono": "^4.13.14",
+    "marked": "^18.1.2",
+    "next": "^16.4.3",
+    "postgres": "^3.4.9",
+    "react": "^19.3.1",
+    "react-dom": "^19.3.1",
+    "react-router-dom": "^7.18.4"
   },
   "devDependencies": {
-    "concurrently": "^10.0.6"
+    "@types/node": "^26.6.5",
+    "@types/react": "^19.3.0",
+    "@types/react-dom": "^19.3.0",
+    "tsx": "^4.23.15",
+    "typescript": "^7.0.2"
   }
 }

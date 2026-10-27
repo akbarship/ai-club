@@ -1,6 +1,6 @@
 import { createHmac, timingSafeEqual } from 'node:crypto';
-import { config } from './config.ts';
-import type { TgUser } from './db.ts';
+import { config } from './config';
+import type { TgUser } from './db';
 
 const MAX_AGE_SEC = 7 * 24 * 3600;
 

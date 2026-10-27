@@ -1,5 +1,9 @@
 node_modules
-web/dist
+.next
+next-env.d.ts
+*.tsbuildinfo
+.vercel
 data
 .env
+.env*.local
 *.log

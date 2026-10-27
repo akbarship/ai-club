@@ -4,9 +4,14 @@ The bot and Telegram Mini App for the AI Club community: guides (qo'llanmalar), 
 a channel subscription gate, banners, keyword deep links, broadcasts and a stats dashboard.
 
 ```
-server/   Node 24 + grammY (bot) + Hono (API) + SQLite (node:sqlite). Runs TypeScript directly, no build step.
-web/      React + Vite mini app. Includes the admin panel at /admin (visible only to ADMIN_IDS).
+app/          Next.js App Router: the mini app page and the API route (Hono)
+src/client/   the mini app (React), including the admin panel at /admin
+src/server/   API, bot handlers (webhook), stats, broadcasts — Postgres via Supabase
+scripts/      db-setup, import, bot-setup, bot-poll
+supabase/     schema.sql
 ```
+
+This is the **Vercel + Supabase** version. The self-hosted version (Node + SQLite + Docker, long polling, background broadcasts) is kept on the [`vps`](../../tree/vps) branch.
 
 ## Features
 
@@ -19,7 +24,7 @@ web/      React + Vite mini app. Includes the admin panel at /admin (visible onl
 
 **Bot**
 - `/start` shows a welcome message with a Mini App button. Users who aren't subscribed also get "Subscribe" and "Check subscription" buttons.
-- The menu button opens the Mini App. It's set automatically at startup.
+- The menu button opens the Mini App. `npm run bot:setup` sets it.
 - **Keywords.** `t.me/<bot>?start=club` sends a prepared message (text, optional photo and buttons such as "open Mini App at /club"). A user typing `club` in the chat gets the same message. Each keyword also counts as a traffic source in stats.
 - `/admin` (admins only) shows quick stats and a button that opens the admin panel.
 - The bot tracks who blocked it (`my_chat_member`) and channel joins and leaves in real time (`chat_member`).
@@ -38,47 +43,54 @@ web/      React + Vite mini app. Includes the admin panel at /admin (visible onl
 - Users: search, filters, and a way to grant or remove club membership by hand until payments exist.
 - Settings: the welcome text, the gate text, and the Club and Courses pitch pages.
 
-## Setup
+## Setup (Vercel + Supabase)
 
-1. **@BotFather**
-   - Create the bot and copy the token.
-   - `Bot Settings → Configure Mini App → Enable` and set the URL to your `WEBAPP_URL`. This turns on `t.me/<bot>?startapp=…` links.
-2. **Channel.** Add the bot to your channel as an **administrator**. No extra rights are needed. Without admin, `getChatMember` and join and leave updates don't work.
-3. `cp .env.example .env` and fill it in. Get your Telegram ID from @userinfobot and put it in `ADMIN_IDS`.
-4. `npm install`
+1. **Supabase**: create a project (free tier works).
+   - Project Settings → Database → Connection string → **Transaction pooler** (port 6543) → `DATABASE_URL`. Put your database password into it.
+   - Project Settings → API → Project URL → `SUPABASE_URL`, and the `service_role` key → `SUPABASE_SERVICE_ROLE_KEY`.
+2. **@BotFather**: create the bot and copy the token.
+3. **Channel**: add the bot to your channel as an **administrator** (no extra rights needed).
+4. **Vercel**: Add New → Project → import `akbarship/ai-club` (branch `main`). In Environment Variables add every key from `.env.example`. Deploy, then copy the address (e.g. `https://ai-club.vercel.app`) into `WEBAPP_URL` and redeploy.
+5. **@BotFather** → Bot Settings → Configure Mini App → Enable, URL = your `WEBAPP_URL`.
+6. **Once, from your computer** (fill `.env` with the same values first):
+
+```bash
+npm install
+```
+
+```bash
+npm run db:setup
+```
+
+```bash
+npm run import
+```
+
+```bash
+npm run bot:setup
+```
+
+`db:setup` creates the tables and the public `uploads` storage bucket. `import` adds the 36 articles as drafts. `bot:setup` points Telegram at `WEBAPP_URL/api/tg/webhook` and sets the commands and the menu button — run it again whenever `WEBAPP_URL` changes.
 
 ### Local development
-
-Telegram only opens Mini Apps over HTTPS, so you need a tunnel to Vite:
 
 ```bash
 npm run dev
 ```
 
-```bash
-cloudflared tunnel --url http://localhost:5173
-```
+Set `DEV_USER_ID=<your id>` in `.env` to use the app in a normal browser at http://localhost:3000. To test the bot locally, `npm run bot:poll` runs it with long polling; it removes the webhook, so run `npm run bot:setup` afterwards.
 
-Put the tunnel URL into `WEBAPP_URL` (and BotFather), then restart `npm run dev`.
+### Limits of the Vercel version
 
-To work on the UI in a normal browser without Telegram, set `DEV_USER_ID=<your id>` in `.env` and open http://localhost:5173.
-
-### Production
-
-```bash
-docker compose up -d --build
-```
-
-The server serves the built Mini App and the API on port 3000. Put it behind HTTPS (Caddy, nginx or Cloudflare). The data (SQLite and uploads) lives in `./data`, so back that folder up. To use a webhook instead of long polling, set `WEBHOOK_URL` to the public base URL.
-
-Without Docker: run `npm run build`, then `NODE_ENV=production npm start`.
+- **Broadcasts** are sent in ~8-second steps driven by the admin page: keep Admin → Xabar yuborish open until it finishes. Closing it pauses sending; reopening resumes.
+- **Image uploads** are limited to 4 MB (Vercel request size limit).
 
 ## Importing articles
 
 `content/articles.uz.json` holds ready-written Uzbek articles. To add them to the database as drafts:
 
 ```bash
-npm run import -w server
+npm run import
 ```
 
 Re-running is safe: an article whose link already exists is skipped. Review the drafts in Admin → Materiallar and publish the ones you want.
