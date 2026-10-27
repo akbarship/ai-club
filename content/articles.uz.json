@@ -1,0 +1,362 @@
+[
+  {
+    "type": "resource",
+    "title": "blocks.so — tayyor interfeys bloklari, bepul",
+    "summary": "Kirish sahifasi, jadval, statistika, chat oynasi — 60 dan ortiq tayyor blokni nusxalab, loyihangizga qo'yasiz.",
+    "link_url": "https://blocks.so/",
+    "tags": "dizayn, shadcn, react, bepul",
+    "body": "## Bu nima\n\nblocks.so — shadcn/ui va Tailwind CSS asosida yozilgan tayyor React bloklari to'plami. Bu yerda alohida tugma yoki input emas, butun bo'laklar bor: ro'yxatdan o'tish formasi, yon panel, statistik kartochkalar, fayl yuklash oynasi, onboarding qadamlari, AI chat interfeysi va boshqalar. Loyiha ochiq kodli va bepul.\n\n## Nega foydali\n\nAI agent bilan sayt yig'ayotganda eng ko'p vaqt \"chiroyli qilib ber\" degan iltimoslarga ketadi. Tayyor blokni olib, agentga \"shuni asos qilib, mening ma'lumotlarim bilan to'ldir\" desangiz, natija ancha tez va tartibli chiqadi.\n\n## Qanday boshlash\n\n1. Saytda kerakli bo'limni oching, masalan *Login & Signup* yoki *Stats*.\n2. Yoqqan blokning kodini nusxalang.\n3. Loyihangizda shadcn/ui o'rnatilgan bo'lsa, kodni to'g'ridan-to'g'ri qo'ying yoki agentga bering.\n\n## Maslahat\n\nAgentga blokni berganda, qaysi qismlarni o'zgartirish mumkin emasligini ham ayting (masalan, joylashuv va bo'shliqlar). Aks holda u \"yaxshilayman\" deb dizaynni buzib qo'yishi mumkin.\n",
+    "install": null,
+    "access": "channel"
+  },
+  {
+    "type": "resource",
+    "title": "Google AI Edge Foresight — kompyuterda ishlaydigan aqlli qaydlar",
+    "summary": "Uchrashuvda o'zingiz qisqa yozib borasiz, Foresight esa to'liq qaydga aylantiradi. Hammasi Mac'ingizda, internetsiz.",
+    "link_url": "https://developers.google.com/edge/foresight",
+    "tags": "AI, qaydlar, macOS, uchrashuvlar",
+    "body": "## Bu nima\n\nForesight — Google'ning macOS uchun qaydlar ilovasi. U uchrashuv paytida fonda tinglaydi, siz esa faqat qisqa belgilar yozib borasiz. Keyin ilova ularni tartibli, to'liq qaydga aylantiradi. Transkripsiya va audio bulutga ketmaydi — hammasi kompyuteringizning o'zida qayta ishlanadi, internetsiz ham ishlaydi.\n\n## Yana nima qila oladi\n\nIlovaga loyiha papkalaringizni, hujjatlaringizni va kalendaringizni ko'rsatsangiz, u ishingiz kontekstini o'zi tushunib oladi. Shunda qaydlar umumiy emas, aynan sizning loyihalaringizga bog'langan bo'ladi.\n\n## Kimga kerak\n\n- Ko'p uchrashuv o'tkazadigan va keyin hammasini eslab qolishda qiynaladiganlarga.\n- Ma'lumotlarini bulutga yuborishni istamaydiganlarga.\n- Zoom'dagi qo'ng'iroqlar uchun ham, yuzma-yuz suhbat uchun ham ishlaydi.\n\n## Qanday boshlash\n\n1. Saytdagi *Download for macOS* tugmasi orqali ilovani yuklab oling.\n2. Birinchi uchrashuvni yozib ko'ring va qisqa belgilar qoldiring.\n3. Keyin \"Knowledge sources\" bo'limiga ish papkalaringizni qo'shing.\n\nHozircha faqat Mac uchun mavjud.\n",
+    "install": null,
+    "access": "channel"
+  },
+  {
+    "type": "resource",
+    "title": "Sileo — React uchun jonli bildirishnomalar",
+    "summary": "Oddiy toast xabarlari zerikarli bo'lsa, Sileo fizika asosidagi animatsiya va shakl o'zgarishi bilan ularni jonlantiradi.",
+    "link_url": "https://sileo.aaryan.design/",
+    "tags": "dizayn, react, animatsiya, komponent",
+    "body": "## Bu nima\n\nSileo — React uchun toast (ekran burchagida chiqadigan qisqa xabar) komponenti. Uning o'ziga xosligi animatsiyada: xabar prujina fizikasi bilan harakatlanadi, SVG shakli esa bir holatdan ikkinchisiga silliq o'tadi. Kutubxona kichik, MIT litsenziyasi ostida, ya'ni tijoriy loyihada ham bemalol ishlatsa bo'ladi.\n\n## Qachon kerak\n\n\"Buyurtma qabul qilindi\", \"Saqlandi\", \"Xatolik yuz berdi\" kabi xabarlar har bir ilovada bor. Ular chiroyli chiqsa, butun mahsulot sifatliroq ko'rinadi — va buni qilish uchun o'zingiz animatsiya yozishingiz shart emas.\n\n## Qanday boshlash\n\n1. Kutubxonani o'rnating (buyruq pastda).\n2. Saytdagi *Playground* bo'limida turli holatlarni sinab ko'ring.\n3. *Docs* bo'limidagi namunani loyihangizga ko'chiring.\n\n## Maslahat\n\nBildirishnomalarni ko'paytirib yubormang: muvaffaqiyatli harakatlar uchun qisqa va jim xabar, xatolar uchun esa aniq tushuntirish yetarli.\n",
+    "install": "npm install sileo",
+    "access": "channel"
+  },
+  {
+    "type": "skill",
+    "title": "GSAP Skills — agentingizni animatsiyaga o'rgating",
+    "summary": "GSAP jamoasining rasmiy skill'lari: Claude Code, Cursor va boshqa agentlar animatsiyani to'g'ri yozishni o'rganadi.",
+    "link_url": "https://github.com/greensock/gsap-skills",
+    "tags": "skill, animatsiya, gsap, claude code",
+    "body": "## Bu nima\n\nGSAP — veb-saytlarda animatsiya qilish uchun eng mashhur kutubxonalardan biri. GSAP Skills esa uning ijodkorlari tayyorlagan rasmiy skill'lar to'plami: ular AI agentga GSAP'dan to'g'ri foydalanishni o'rgatadi — timeline'lar, ScrollTrigger, pluginlar, React/Vue/Svelte bilan ishlash va tezlikni saqlash.\n\n## Nega kerak\n\nAgentlar ko'pincha eskirgan yoki noto'g'ri GSAP kodini yozadi. Skill o'rnatilgach, agent qaysi API to'g'ri ekanini biladi va animatsiyalar birinchi urinishda ishlaydi.\n\nYana bir yaxshi yangilik: GSAP endi butunlay bepul, ilgari pullik bo'lgan SplitText, MorphSVG kabi pluginlar ham, tijoriy loyihalar uchun ham.\n\n## Qanday o'rnatish\n\n1. Terminalda pastdagi buyruqni ishga tushiring — u o'rnatilgan agentingizni o'zi aniqlaydi.\n2. Claude Code, Cursor, Codex, Windsurf, Copilot va boshqa 40 dan ortiq agent bilan ishlaydi.\n3. Keyin agentga oddiy so'z bilan yozing: \"Sahifa pastga aylantirilganda kartochkalar navbat bilan chiqsin\".\n\n## Maslahat\n\nNatijani albatta telefonda ham tekshiring — skroll animatsiyalari mobil qurilmada boshqacha ishlashi mumkin.\n",
+    "install": "npx skills add https://github.com/greensock/gsap-skills",
+    "access": "channel"
+  },
+  {
+    "type": "skill",
+    "title": "page-mascot — sahifangiz uchun jonli personaj",
+    "summary": "Kursorni kuzatib turadigan, bosilsa ko'z qisadigan kichik maskot. Tayyorlaridan tanlang yoki o'zingizni personajga aylantiring.",
+    "link_url": "https://koboyo.com/page-mascot",
+    "tags": "skill, dizayn, react, maskot",
+    "body": "## Bu nima\n\npage-mascot — sahifa tepasiga qo'yiladigan kichik React personaji. U o'quvchining kursorini ko'zi bilan kuzatadi, bosilsa ko'z qisadi. Saytda 50 dan ortiq tayyor personaj bor: ayiq, quyon, mushuk, tulki, dinozavr va boshqalar.\n\n## Eng qiziq qismi\n\nLoyiha bilan birga agent skill'i ham keladi: u yangi personaj chizib beradi. Bir nechta uslub bor — rangli, qora chiziqli, qalam eskizi, riso bosma, qog'oz qirqma, piksel. Hatto o'z suratingizni yuborib, o'zingizga o'xshash personaj ham olish mumkin.\n\n## Nega foydali\n\nShaxsiy blog, portfolio yoki kurs sahifasida bunday kichik detal saytni esda qolarli qiladi. Odamlar uni \"bosib ko'rish\" uchun ham qaytib keladi.\n\n## Qanday boshlash\n\n1. Saytda yoqqan personaj ustiga borib *Use* tugmasini bosing — joylash bo'yicha ko'rsatma chiqadi.\n2. O'z personajingiz kerak bo'lsa, GitHub'dagi skill'ni agentingizga o'rnating.\n\n## Maslahat\n\nMaskotni har bir sahifaga emas, faqat bosh sahifa yoki \"Men haqimda\" bo'limiga qo'ying — shunda u e'tiborni chalg'itmaydi.\n",
+    "install": null,
+    "access": "channel"
+  },
+  {
+    "type": "mcp",
+    "title": "Agentation — agentga dizayn bo'yicha izohni aniq yetkazing",
+    "summary": "Sahifadagi elementni bosasiz, izoh yozasiz, agent esa aynan qaysi tugma haqida gap ketayotganini tushunadi.",
+    "link_url": "https://www.agentation.com/",
+    "tags": "mcp, dizayn, claude code, frontend",
+    "body": "## Muammo\n\nAgentga \"anavi o'ngdagi tugmani biroz kattaroq qil\" deb yozasiz — u esa boshqa tugmani o'zgartiradi. Chunki matndan qaysi element nazarda tutilganini aniqlash qiyin.\n\n## Agentation nima qiladi\n\nAgentation loyihangizga kichik vosita qo'shadi. Uni yoqasiz, sahifadagi istalgan elementni bosasiz va izoh yozasiz. Vosita izohni element nomi va joylashuvi bilan birga agent tushunadigan tartibli matnga aylantiradi. Uni Claude Code, Codex yoki boshqa agentga qo'yasiz.\n\nMCP orqali ulasangiz, nusxalashga ham hojat qolmaydi: agent izohlaringizni o'zi o'qiydi va bajaradi.\n\n## Qanday boshlash\n\n1. Paketni dev-bog'liqlik sifatida o'rnating (buyruq pastda).\n2. Loyihani ishga tushiring va pastki o'ng burchakdagi belgini bosing.\n3. Elementlar ustida izoh qoldiring, natijani nusxalab agentga bering.\n4. Doimiy ishlash uchun saytdagi *MCP* bo'limi bo'yicha agentingizga ulang.\n\n## Maslahat\n\nBitta izohda bitta o'zgarish so'rang. Bir nechta kichik, aniq izoh bitta uzun tushuntirishdan ancha yaxshi ishlaydi.\n",
+    "install": "npm install agentation -D",
+    "access": "channel"
+  },
+  {
+    "type": "resource",
+    "title": "Shaders — veb-sayt uchun tayyor WebGPU effektlar",
+    "summary": "Gradientlar, glitch, xrom va boshqa jonli fonlar: bepul muharrirda yig'ib, React yoki Vue komponent sifatida olasiz.",
+    "link_url": "https://shaders.com/",
+    "tags": "dizayn, webgpu, animatsiya, fon",
+    "body": "## Bu nima\n\nShaders — WebGPU asosidagi shader komponentlar kutubxonasi. Shader — bu videokarta chizadigan jonli grafik effekt: harakatlanuvchi gradient, suyuqlik, glitch, metall yaltirashi kabi. Kutubxona ochiq kodli (MIT), Vue, React, Svelte, Solid va oddiy JavaScript bilan ishlaydi.\n\n## Bepul muharrir\n\nEng qulay tomoni — brauzerdagi bepul muharrir. 200 dan ortiq oddiy bo'lakni qatlam-qatlam qo'shib, ranglar va parametrlarni o'zgartirib, o'z effektingizni yig'asiz. Keyin uni tayyor kod sifatida eksport qilasiz. Shader yozishni bilish shart emas.\n\n## Qayerda ishlatish\n\n- Landing sahifaning bosh qismi (hero) uchun fon.\n- Narxlar sahifasidagi ajratilgan kartochka.\n- Logotip yoki sarlavha ortidagi jonli effekt.\n\n## Qanday boshlash\n\n1. Saytda *Create a shader* tugmasini bosing.\n2. Tayyor shablondan boshlang va ranglarni brendingizga moslang.\n3. *Export* orqali kodni oling.\n\n## Maslahat\n\nJonli fon chiroyli, lekin uni ko'paytirmang: bitta sahifada bitta effekt yetarli. Aks holda sayt sekinlashadi va e'tibor tarqaladi. Kengaytirilgan imkoniyatlar uchun pullik Pro tarif ham bor.\n",
+    "install": null,
+    "access": "channel"
+  },
+  {
+    "type": "resource",
+    "title": "Codex Reset — limit qachon yangilanishini oldindan bilish",
+    "summary": "Codex limitingiz tugadimi? Bu sayt oxirgi yangilanish qachon bo'lganini va keyingisi qachon kutilishini ko'rsatadi.",
+    "link_url": "https://codex-reset.com",
+    "tags": "AI, codex, limitlar",
+    "body": "## Bu nima\n\nOpenAI Codex bilan faol ishlasangiz, foydalanish limitiga tez-tez yetib borasiz. Codex Reset — limitlar umumiy tarzda qachon yangilanganini kuzatib boradigan mustaqil sayt.\n\n## Saytda nima bor\n\n- Oxirgi tasdiqlangan yangilanish qachon bo'lgani, mahalliy vaqtingizda.\n- Keyingi 24 va 48 soat ichida yangilanish ehtimoli (prognoz) va uning ishonchlilik darajasi.\n- Yangilanishlar tarixi va odatda kunning qaysi vaqtida bo'lishi.\n- X'dagi xabarlarga havolalar.\n\n## Nega foydali\n\nLimit tugaganda katta vazifani boshlashdan oldin bu yerga qarab qo'ysangiz, qachon davom etish mumkinligini taxminan bilib olasiz va ishni rejalashtirasiz.\n\n## Muhim\n\nBu OpenAI'ning rasmiy sayti emas, prognozlar esa faqat taxmin. Aniq ma'lumotni har doim Codex'ning o'zidagi limit ko'rsatkichidan tekshiring.\n",
+    "install": null,
+    "access": "channel"
+  },
+  {
+    "type": "skill",
+    "title": "last30days — mavzu bo'yicha so'nggi 30 kunlik tadqiqot",
+    "summary": "Bitta buyruq bilan Reddit, X, YouTube, Hacker News va boshqa manbalardan mavzu bo'yicha eng muhim gaplarni yig'ib beradigan skill.",
+    "link_url": "https://github.com/mvanhorn/last30days-skill",
+    "tags": "skill, tadqiqot, claude code",
+    "body": "## Bu nima\n\nlast30days — agent uchun tadqiqot skill'i. Unga mavzu berasiz, u esa so'nggi 30 kun ichida odamlar u haqida nima deyayotganini qidiradi: Reddit, X, YouTube, Hacker News, Polymarket, GitHub va boshqalar. Natijalarni muharrirlar fikriga emas, real reaktsiyalarga — upvote, layk, hatto pul tikilgan bashoratlarga qarab saralaydi va qisqa xulosa yozadi.\n\n## Qachon kerak\n\n- Yangi AI vosita haqida odamlar haqiqatda nima deyayotganini bilish uchun.\n- Kontent rejalashtirishda: auditoriya hozir nimani muhokama qilyapti?\n- Mahsulot ishga tushirishdan oldin raqobatchilar haqidagi fikrlarni yig'ish uchun.\n\n## Qanday o'rnatish\n\nClaude Code'da (avtomatik yangilanadi):\n\n1. `/plugin marketplace add mvanhorn/last30days-skill`\n2. `/plugin install last30days`\n\nBoshqa agentlar uchun (Codex, Cursor, Gemini CLI) pastdagi buyruqdan foydalaning.\n\nReddit, Hacker News, Polymarket va GitHub sozlamasiz ishlaydi. X, YouTube va boshqalarni birinchi ishga tushirishdagi sozlash ustasi orqali qo'shasiz.\n",
+    "install": "npx skills add mvanhorn/last30days-skill -g",
+    "access": "channel"
+  },
+  {
+    "type": "resource",
+    "title": "Astryx — AI agentlar uchun tayyor dizayn tizimi",
+    "summary": "Ochiq kodli dizayn tizimi: komponentlar, mavzular va shablonlar — agent ular bilan ishlashni oson tushunadigan qilib qurilgan.",
+    "link_url": "https://astryx.atmeta.com",
+    "tags": "dizayn, dizayn tizimi, react",
+    "body": "## Bu nima\n\nAstryx — ochiq kodli dizayn tizimi: tayyor komponentlar, mavzular (themes), shablonlar va sinab ko'rish uchun playground. U React 19+ va StyleX asosida qurilgan va \"agent ready\" deb ta'riflanadi, ya'ni AI agentlar bilan ishlashga moslashtirilgan.\n\n## Nega e'tiborga loyiq\n\nAgent bilan interfeys yig'ganda eng katta muammo — har bir sahifa boshqacha ko'rinishi. Yagona dizayn tizimi bo'lsa, agent bir xil tugma, karta va ranglardan foydalanadi, mahsulot esa yaxlit ko'rinadi.\n\n## Qanday boshlash\n\n1. Saytda *Get started* bo'limini o'qing.\n2. *Themes* bo'limida brendingizga yaqin mavzuni tanlang va moslang.\n3. *Templates* dan tayyor sahifani asos qilib oling.\n\n## Muhim\n\nLoyiha hozircha beta holatda. Shaxsiy loyiha yoki prototipda sinab ko'rish uchun juda yaxshi, lekin katta ishlab chiqarish loyihasiga qo'yishdan oldin o'zgarishlarni kuzatib boring.\n",
+    "install": null,
+    "access": "channel"
+  },
+  {
+    "type": "resource",
+    "title": "Iconimate — harakatlanadigan ikonkalar",
+    "summary": "220 ta jonli SVG ikonka: sichqoncha ustiga borganda qo'ng'iroq jiringlaydi, yurak uradi. Bepul va ochiq kodli.",
+    "link_url": "https://iconimate.app/",
+    "tags": "dizayn, ikonkalar, animatsiya, react",
+    "body": "## Bu nima\n\nIconimate — React uchun animatsiyali ikonkalar to'plami. Har bir ikonkaning o'z harakati bor: qo'ng'iroq jiringlaydi, yurak uradi, lupa qidiradi, konvert ochiladi. Animatsiya sichqoncha ustiga borganda ishga tushadi. 220 ta ikonka bor, hammasi bepul va MIT litsenziyasida.\n\n## Nega foydali\n\nKichik harakat interfeysga \"tirik\" tuyg'u beradi va foydalanuvchiga qaysi element bosiladigan ekanini sezdiradi. Iconimate'da animatsiyalar ma'noli qilingan: har biri ikonkaning vazifasini ta'kidlaydi.\n\n## Qanday o'rnatish\n\nIkonkalar shadcn CLI orqali bittadan qo'shiladi — faqat keraklisini olasiz va kod loyihangizda qoladi. Pastdagi buyruq qo'ng'iroq ikonkasini qo'shadi; boshqa ikonka uchun oxiridagi nomni almashtiring.\n\n## Maslahat\n\nHamma ikonkani harakatlantirmang. Faqat muhim joylarda — bildirishnomalar, sevimlilar, yuborish tugmasi — ishlatsangiz, ta'siri kuchliroq bo'ladi.\n",
+    "install": "npx shadcn@latest add https://iconimate.app/r/bell.json",
+    "access": "channel"
+  },
+  {
+    "type": "resource",
+    "title": "Dot Matrix — nuqtali yuklanish animatsiyalari",
+    "summary": "Oddiy aylanuvchi spinner o'rniga 55 dan ortiq chiroyli nuqtali loader. Bitta buyruq bilan qo'shiladi.",
+    "link_url": "https://dotmatrix.zzzzshawn.cloud",
+    "tags": "dizayn, react, animatsiya, loader",
+    "body": "## Bu nima\n\nDot Matrix — \"yuklanmoqda\" holati uchun React komponentlari to'plami. Hammasi nuqtali matritsa uslubida: to'lqin, spiral, radar, yurak urishi, piksel yomg'iri va boshqalar. 55 dan ortiq variant bor, hammasi bepul va ochiq kodli. React, TypeScript, Tailwind CSS va shadcn asosida qurilgan.\n\n## Nega foydali\n\nFoydalanuvchi kutayotgan soniyalar ham mahsulot tajribasining bir qismi. Ayniqsa AI javob generatsiya qilayotganda yaxshi loader kutishni ancha yengillashtiradi.\n\n## Qanday o'rnatish\n\nKomponentlar shadcn registry orqali qo'shiladi: kod to'g'ridan-to'g'ri loyihangizga tushadi va uni xohlagancha o'zgartirishingiz mumkin. Pastdagi buyruq bitta loaderni qo'shadi; boshqasini saytdagi *Playground* dan tanlab, nomini almashtiring.\n\n## Maslahat\n\nLoader uslubini brendingizga moslang: rangni asosiy rangga o'zgartiring va butun ilovada bitta loaderdan foydalaning.\n",
+    "install": "npx shadcn@latest add @dotmatrix/dotm-square-3",
+    "access": "channel"
+  },
+  {
+    "type": "resource",
+    "title": "Codenotch — AI limitlaringiz ekran chetida",
+    "summary": "Claude Code va boshqa agentlarning limiti qancha qolgani hamda agent ishlayaptimi yoki sizni kutyaptimi — hammasi bitta kichik panelda.",
+    "link_url": "https://github.com/vinzdg/codenotch",
+    "tags": "macOS, claude code, limitlar, AI",
+    "body": "## Bu nima\n\nCodenotch — macOS uchun kichik ilova. U ekran chetiga qora \"chuqurcha\" (notch) mahkamlaydi va unda har bir AI kod yordamchingiz uchun halqa ko'rsatadi: limitning qanchasi sarflangani, agent hozir ishlayaptimi, ishni tugatdimi yoki sizning javobingizni kutyaptimi.\n\n## Nega qulay\n\nBir nechta agent bilan ishlaganda doim terminalga qarab, limitni tekshirib turish charchatadi. Codenotch'da bir qarashda hammasi ko'rinadi. Halqa ustiga borsangiz, limit oynalari va ular qachon yangilanishini ko'rsatadi. Claude uchun ko'rsatkich Claude Code'dagi `/usage` bilan bir xil, shuning uchun raqamlar mos tushadi.\n\n## Qanday o'rnatish\n\n1. GitHub sahifasidagi *Download* tugmasi orqali `Codenotch.dmg` faylini yuklab oling.\n2. Ilovani Applications papkasiga ko'chiring.\n3. Ilova imzolangan va o'zi yangilanib turadi.\n\nFaqat macOS uchun.\n",
+    "install": null,
+    "access": "channel"
+  },
+  {
+    "type": "resource",
+    "title": "Doodle Icons — qo'lda chizilgandek jonli ikonkalar",
+    "summary": "200 ga yaqin ikonka: o'zini o'zi chizadi va multfilmdagidek titrab turadi. Bepul, SVG va React uchun.",
+    "link_url": "https://github.com/oreo-design/doodle-icons",
+    "tags": "dizayn, ikonkalar, svg, animatsiya",
+    "body": "## Bu nima\n\nOreo Doodle Icons — qo'lda chizilgan uslubdagi ikonkalar to'plami. Ularning o'ziga xosligi: ikonka ekranda o'zini chizib chiqadi, keyin esa eski multfilmlardagidek chiziqlari doim yengil \"qaynab\" turadi. Ikonkalar bepul, oddiy SVG, PNG va React komponent ko'rinishida mavjud.\n\n## Qayerga mos keladi\n\nBolalar uchun mahsulotlar, ta'lim platformalari, ijodiy portfoliolar, do'stona ohangdagi bloglar. Qat'iy korporativ interfeysga unchalik mos kelmaydi, lekin \"insoniy\" tuyg'u kerak bo'lgan joyda juda yaxshi ishlaydi.\n\n## Qanday boshlash\n\n1. Ikonkalarni doodle.oreoui.com saytida ko'rib chiqing.\n2. React loyihasi bo'lsa, paketni o'rnating (buyruq pastda).\n3. Kutubxona kerak bo'lmasa, repozitoriydagi `icons/` (oddiy) yoki `icons-animated/` (harakatli) papkasidan SVG fayllarni olib ishlating.\n\n## Maslahat\n\nTitrash effekti filtr orqali ishlaydi: uni sahifaga bir marta qo'yasiz, keyin sarlavhalarga ham qo'llasangiz, ikonka va matn bir uslubda \"jonlanadi\".\n",
+    "install": "npm i @oreo-design/doodle-icons",
+    "access": "channel"
+  },
+  {
+    "type": "resource",
+    "title": "ArloUI — React Native uchun tayyor komponentlar",
+    "summary": "Mobil ilova yasayapsizmi? Holatlari va animatsiyasi puxta o'ylangan komponentlarni nusxalab olasiz.",
+    "link_url": "https://arloui.com/docs/components/skeleton",
+    "tags": "dizayn, react native, mobil, komponent",
+    "body": "## Bu nima\n\nArloUI — React Native uchun nusxalab-qo'yiladigan komponentlar to'plami: tugmalar, kartochkalar, ro'yxatlar, pastdan chiqadigan oynalar (sheet), sana tanlash, tab bar, skeleton, toast va boshqalar. Har bir komponentning barcha holatlari (yuklanmoqda, xato, faol emas) va harakat qoidalari oldindan o'ylangan.\n\n## Nega foydali\n\nMobil ilovada ko'pincha \"bo'sh\" holatlar unutiladi: masalan, ma'lumot yuklanayotganda nima ko'rinadi? ArloUI bunday holatlarni ham qamrab olgan. Hujjatlarda har bir komponentning tuzilishi tushuntirilgan, telefonda sinab ko'rish uchun QR kod ham bor.\n\n## Qanday boshlash\n\n1. Hujjatlardan kerakli komponentni toping.\n2. CLI orqali qo'shing (pastdagi buyruq skeleton komponentini qo'shadi).\n3. Komponent sahifasidagi *Copy markdown* tugmasi bilan tavsifni nusxalab, agentingizga kontekst sifatida bering.\n\n## Maslahat\n\nSaytda *Agents* bo'limi ham bor — agent bilan ishlasangiz, avval o'shani o'qing.\n",
+    "install": "npx arloui add skeleton",
+    "access": "channel"
+  },
+  {
+    "type": "resource",
+    "title": "Duck.ai — ro'yxatdan o'tmasdan, maxfiy AI chat",
+    "summary": "DuckDuckGo'ning bepul chati: ChatGPT, Claude va boshqa modellar bilan akkauntsiz va maxfiylikni saqlagan holda gaplashasiz.",
+    "link_url": "https://duck.ai",
+    "tags": "AI, chat, maxfiylik, bepul",
+    "body": "## Bu nima\n\nDuck.ai — DuckDuckGo qidiruv tizimining AI chati. Unda ChatGPT, Claude va boshqa mashhur modellar bilan suhbatlashish mumkin. Asosiy farqi — maxfiylik: suhbatlaringiz shaxsingizga bog'lanmaydi. Xizmat bepul va akkaunt ochish talab qilinmaydi.\n\n## Kimga kerak\n\n- Shaxsiy yoki ish bilan bog'liq nozik savollarni AI'ga bermoqchi bo'lganlarga.\n- Turli modellarni tez solishtirib ko'rmoqchi bo'lganlarga, har biriga alohida ro'yxatdan o'tmasdan.\n- AI bilan endi tanishayotgan va hali obuna sotib olishni istamaydiganlarga.\n\n## Qanday boshlash\n\n1. duck.ai saytini oching.\n2. Model tanlang va savolingizni yozing.\n\n## Maslahat\n\nBepul versiyada odatda modellarning yengilroq variantlari va cheklovlar bo'ladi. Katta, murakkab vazifalar uchun asosiy xizmatlarning o'zidan foydalanish yaxshiroq, tezkor savollar uchun esa Duck.ai juda qulay.\n",
+    "install": null,
+    "access": "channel"
+  },
+  {
+    "type": "resource",
+    "title": "HeroUI — chiroyli va qulay React komponentlari",
+    "summary": "Formalar, modal oynalar, navigatsiya, kalendar — React Aria va Tailwind CSS v4 asosida, hamma uchun qulay qilib yasalgan.",
+    "link_url": "https://heroui.com/en/docs/react/components",
+    "tags": "dizayn, react, komponent, tailwind",
+    "body": "## Bu nima\n\nHeroUI — React uchun komponentlar kutubxonasi. Unda deyarli hamma narsa bor: accordion, alert, avtoto'ldirish, tugmalar guruhi, kalendar, rang tanlash, sana oralig'i, drawer, OTP kiritish maydoni, pagination va boshqalar. U React Aria va Tailwind CSS v4 asosida qurilgan.\n\n## Nega tanlash kerak\n\n\"Accessible\" — ya'ni hamma uchun qulay. Komponentlar klaviatura bilan boshqarishni, ekran o'quvchi dasturlarni va to'g'ri fokus tartibini qo'llab-quvvatlaydi. Buni o'zingiz noldan qilish juda ko'p vaqt oladi.\n\n## Qanday boshlash\n\n1. Hujjatlardagi *All Components* ro'yxatini ko'rib chiqing.\n2. Har bir komponent sahifasida namunalar va kod bor — o'rnatish bo'yicha yo'riqnoma ham shu yerda.\n3. Kengaytirilgan komponentlar, shablonlar va AI vositalari uchun pullik HeroUI Pro ham mavjud.\n\n## Maslahat\n\nAgar loyihangizda allaqachon shadcn/ui bo'lsa, ikki kutubxonani aralashtirmang. Bittasini tanlab, oxirigacha shu bilan ishlang.\n",
+    "install": null,
+    "access": "channel"
+  },
+  {
+    "type": "resource",
+    "title": "posts.design — brendlar ijtimoiy tarmoqqa nima joylaydi",
+    "summary": "980 dan ortiq brendning haqiqiy postlari, karusellari, X bannerlari va OG rasmlari bir joyda. Har kuni yangilanadi.",
+    "link_url": "https://posts.design",
+    "tags": "dizayn, ilhom, smm, ijtimoiy tarmoqlar",
+    "body": "## Bu nima\n\nposts.design — ijtimoiy tarmoqlar uchun dizayn ilhomi bazasi. Unda konsept yoki \"Dribbble uchun\" ishlar emas, kompaniyalar haqiqatda e'lon qilgan postlar bor: mahsulot e'lonlari, karusellar, ishga taklif postlari, X sahifasi bannerlari, havola ulashilganda chiqadigan OG rasmlar.\n\n## Qanday qidirish\n\nPostlar turlarga ajratilgan: Launch (ishga tushirish), Hiring (ishga olish), Update, Teaser, Milestone, Funding, Partnership va boshqalar. Brend nomi bo'yicha ham qidirish mumkin. Baza har kuni yangilanadi.\n\n## Kimga kerak\n\n- Telegram kanal, Instagram yoki X uchun post tayyorlaydiganlarga.\n- O'z mahsulotini ishga tushirishga tayyorlanayotganlarga: katta kompaniyalar e'lonni qanday ko'rsatishini ko'rib olasiz.\n\n## Qanday boshlash\n\n1. Saytni oching va kerakli turdagi postlarni filtrlang.\n2. Yoqqanlarini saqlash uchun bepul ro'yxatdan o'ting.\n\n## Maslahat\n\nBitta postdan nusxa olmang. 5–10 ta misolni ko'rib chiqing, ulardagi umumiy qoidani (ierarxiya, matn hajmi, ranglar) toping va o'zingiznikiga qo'llang.\n",
+    "install": null,
+    "access": "channel"
+  },
+  {
+    "type": "resource",
+    "title": "Morphicons — biridan ikkinchisiga oqib o'tadigan ikonkalar",
+    "summary": "Menyu ikonkasi xochga, play pauzaga silliq aylanadi. React, Vue va Svelte uchun SVG morfing kutubxonasi.",
+    "link_url": "https://www.morphicons.com",
+    "tags": "dizayn, ikonkalar, animatsiya",
+    "body": "## Bu nima\n\nMorphicons — ikonka morfingi uchun kutubxona: bir ikonka boshqasiga silliq \"oqib\" o'tadi. Masalan, gamburger menyu xochga, play tugmasi pauzaga, nusxalash belgisi \"tayyor\" belgisiga aylanadi. React, Vue va Svelte uchun mavjud.\n\n## Nega foydali\n\nHolat o'zgarganda keskin almashinish o'rniga silliq o'tish foydalanuvchiga nima bo'lganini tushunishga yordam beradi. Bu kichik detal, lekin mahsulotni ancha \"qimmatroq\" ko'rsatadi.\n\n## Qayerda ishlatish\n\n- Menyu ochish va yopish tugmasi.\n- Pleyer boshqaruvi.\n- \"Nusxa olish\" tugmasi bosilgandan keyin \"Nusxa olindi\" holati.\n- Sevimlilarga qo'shish.\n\n## Qanday boshlash\n\n1. Saytda ikonkalarni bosib, morfing qanday ishlashini ko'ring.\n2. O'z freymvorkingiz uchun o'rnatish yo'riqnomasini oching.\n\n## Maslahat\n\nMorfing faqat bir-biriga mantiqan bog'liq ikonkalar o'rtasida yaxshi ko'rinadi (ochiq va yopiq, play va pauza). Bog'liq bo'lmagan ikonkalarni bir-biriga aylantirsangiz, foydalanuvchini chalg'itadi.\n",
+    "install": null,
+    "access": "channel"
+  },
+  {
+    "type": "resource",
+    "title": "tweakcn — shadcn/ui mavzusini vizual sozlash",
+    "summary": "Ranglar, shriftlar va burchaklarni kod yozmasdan o'zgartirib, natijani darhol ko'rasiz va tayyor mavzuni olasiz.",
+    "link_url": "https://tweakcn.com/editor/theme",
+    "tags": "dizayn, shadcn, ranglar, mavzu",
+    "body": "## Bu nima\n\ntweakcn — shadcn/ui uchun mavzu (theme) generatori. Ranglar, shriftlar, burchak radiuslari va soyalarni o'zgartirasiz, natijani esa haqiqiy komponentlarda (kartochka, forma, jadval, dashboard) darhol ko'rasiz.\n\n## Nega kerak\n\nshadcn/ui'ning standart ko'rinishini juda ko'p saytda uchratish mumkin, shuning uchun hamma loyiha bir xil chiqadi. tweakcn bilan bir necha daqiqada o'z brendingizga mos mavzu yasaysiz va loyiha \"yana bir shadcn sayti\" bo'lib ko'rinmaydi.\n\n## Qanday boshlash\n\n1. Muharrirni oching va tayyor mavzulardan biridan boshlang.\n2. Asosiy rangni brendingizga moslang, shriftni tanlang.\n3. Yorug' va qorong'i rejimlarni alohida tekshiring.\n4. Tayyor CSS kodni nusxalab, loyihangizdagi global stillarga qo'ying.\n\n## Maslahat\n\nAsosiy rangni tanlaganda kontrastga e'tibor bering: tugma ustidagi matn yaxshi o'qilishi kerak. Ikki-uch rangdan ortiq ishlatmang.\n",
+    "install": null,
+    "access": "channel"
+  },
+  {
+    "type": "resource",
+    "title": "Fontshare — sifatli shriftlar, bepul",
+    "summary": "Indian Type Foundry'ning bepul shrift xizmati: zamonaviy, professional shriftlarni loyihangizda bemalol ishlating.",
+    "link_url": "https://www.fontshare.com",
+    "tags": "dizayn, shriftlar, bepul, tipografiya",
+    "body": "## Bu nima\n\nFontshare — Hindistondagi Indian Type Foundry (ITF) shrift studiyasining bepul xizmati. Unda studiyaning o'zi chizgan professional darajadagi shriftlar bor. Ular Google Fonts'dagi ko'pchilik shriftlardan ko'ra \"zamonaviyroq\" va kamroq tanish ko'rinadi.\n\n## Nega foydali\n\nShrift — sayt yoki postning xarakterini birinchi bo'lib belgilaydigan narsa. Hamma Inter yoki Roboto ishlatayotganda Fontshare'dagi shrift dizayningizni darhol boshqalardan ajratib turadi.\n\n## Qanday boshlash\n\n1. Saytda shriftlarni ko'rib chiqing va o'z matningiz bilan sinab ko'ring.\n2. Yoqqanini yuklab oling yoki saytdagi havola orqali vebga ulang.\n3. Ishlatishdan oldin *Licenses* bo'limini o'qib chiqing.\n\n## Maslahat\n\nShrift tanlashda albatta o'zbekcha matn bilan tekshiring: \"o'\", \"g'\", \"sh\", \"ch\" harflari va tutuq belgisi chiroyli ko'rinishi kerak. Ba'zi shriftlarda kerakli belgilar yo'q bo'ladi.\n",
+    "install": null,
+    "access": "channel"
+  },
+  {
+    "type": "resource",
+    "title": "Iconify — 400 mingdan ortiq ochiq ikonka bir joyda",
+    "summary": "Material, Solar, Tabler, Lucide va yana 200 dan ortiq to'plam: kerakli ikonkani bir qidiruvda topasiz.",
+    "link_url": "https://icon-sets.iconify.design",
+    "tags": "dizayn, ikonkalar, bepul",
+    "body": "## Bu nima\n\nIconify — ochiq kodli ikonkalarning eng katta katalogi: 220 dan ortiq to'plamdan 400 mingdan ortiq ikonka. Bu yerda Google'ning Material Symbols'i, Solar, Tabler, Lucide, Phosphor va boshqa ko'plab mashhur to'plamlar bor.\n\n## Nega qulay\n\nKerakli ikonka uchun o'nlab saytni aylanib chiqish shart emas. Bitta qidiruv bilan barcha to'plamlardan izlaysiz, keyin SVG yoki tayyor kod sifatida olasiz.\n\n## Litsenziyaga e'tibor bering\n\nHar bir to'plamning o'z litsenziyasi bor va u katalogda ko'rsatiladi: Apache 2.0, MIT, CC BY va boshqalar. Ko'pchiligi tijoriy foydalanishga ruxsat beradi, lekin ba'zilari muallifni ko'rsatishni talab qiladi.\n\n## Qanday boshlash\n\n1. Katalogni oching va qidiruvga kerakli so'zni ingliz tilida yozing.\n2. Ikonkani bosib, SVG'ni nusxalang yoki freymvorkingiz uchun kodni oling.\n\n## Maslahat\n\nBitta loyihada bitta to'plamdan foydalaning. Turli to'plamdagi ikonkalarni aralashtirsangiz, chiziq qalinligi va uslubi farq qilib, interfeys tartibsiz ko'rinadi.\n",
+    "install": null,
+    "access": "channel"
+  },
+  {
+    "type": "resource",
+    "title": "3dicons — bepul 3D ikonkalar",
+    "summary": "1400 dan ortiq tayyor 3D ikonka: taqdimot, landing sahifa yoki post uchun. Figma va Blender fayllari ham bor.",
+    "link_url": "https://3dicons.co/explore",
+    "tags": "dizayn, 3d, ikonkalar, bepul",
+    "body": "## Bu nima\n\n3dicons — bepul 3D ikonkalar to'plami. Saytda 1400 dan ortiq ikonka bor: turli burchak va ranglarda tayyorlangan, yuklab olib darhol ishlatsa bo'ladi.\n\n## Qayerda ishlatish\n\n- Landing sahifadagi xususiyatlar bo'limi.\n- Telegram yoki Instagram postlari, karusellar.\n- Taqdimot slaydlari.\n- Ilovadagi bo'sh holatlar (\"Hali hech narsa yo'q\" ekranlari).\n\n## Qanday boshlash\n\n1. *Explore* bo'limida kerakli ikonkani toping.\n2. Rasm sifatida yuklab oling.\n3. Dizaynerlar uchun Figma fayl, Figma plagin va Blender manbalari ham mavjud — rangni yoki burchakni o'zingiz o'zgartirishingiz mumkin.\n\n## Maslahat\n\n3D ikonkalar e'tiborni kuchli tortadi, shuning uchun ularni oddiy chiziqli ikonkalar bilan aralashtirmang. Bitta sahifada bitta uslubni ushlang: yoki hamma ikonka 3D, yoki hammasi oddiy.\n",
+    "install": null,
+    "access": "channel"
+  },
+  {
+    "type": "resource",
+    "title": "21st.dev — 12 mingdan ortiq tayyor React komponent",
+    "summary": "Animatsiyali hero bloklar, shader fonlar, tugmalar, AI chat oynalari: ko'rib, bitta buyruq bilan o'rnatasiz yoki agentingizga berasiz.",
+    "link_url": "https://21st.dev",
+    "tags": "dizayn, react, komponent, agent",
+    "body": "## Bu nima\n\n21st.dev — dizayn muhandislari tomonidan yaratilgan React va Tailwind CSS komponentlari bozori. 12 mingdan ortiq komponent, shablon va shadcn mavzulari bor: animatsiyali hero bloklar, shader fonlar, gradientlar, tugmalar, kartochkalar, AI chat interfeyslari, navigatsiya, kirish formalari.\n\n## Agent bilan ishlash uchun\n\nSayt AI agentlar bilan ishlashni hisobga olib qurilgan: komponentni jonli ko'rasiz, so'ng bitta buyruq bilan o'rnatasiz yoki tayyor promptni nusxalab, agentingizga berasiz.\n\n## Qanday boshlash\n\n1. Kategoriyalardan birini oching, masalan *Hero sections* yoki *AI chats*.\n2. *Top today* bo'limida kunning eng ko'p saqlangan komponentlarini ko'ring.\n3. Yoqqanini ochib, o'rnatish buyrug'ini yoki promptni nusxalang.\n\nKo'p narsa bepul, qo'shimcha imkoniyatlar uchun pullik tarif ham bor.\n\n## Maslahat\n\nBitta sahifaga turli mualliflarning juda ko'p \"effektli\" komponentini yig'mang. Bitta kuchli hero va oddiy, toza qolgan qismlar ancha professional ko'rinadi.\n",
+    "install": null,
+    "access": "channel"
+  },
+  {
+    "type": "resource",
+    "title": "bloub — animatsiyali SVG avatar yasash",
+    "summary": "Shakli, kayfiyati va rangini o'zingiz tanlaydigan jonli avatar. Boti yoki mahsuloti uchun \"yuz\" kerak bo'lganlarga.",
+    "link_url": "https://bloub.vercel.app/",
+    "tags": "dizayn, avatar, svg, animatsiya",
+    "body": "## Bu nima\n\nbloub — brauzerda ishlaydigan animatsiyali avatar konstruktori. Avatar oddiy shakl bo'lib, u bir holatdan ikkinchisiga silliq o'tadi. Loyiha x.ai botining avatari uslubidan ilhomlangan va hech qanday animatsiya kutubxonasisiz, toza SVG'da yozilgan.\n\n## Nimalarni sozlash mumkin\n\n- **Shakl:** doira, toshcha, yumaloq kvadrat, kapsula, uchburchak, olti burchak, bulut, tomchi.\n- **Kayfiyat:** xotirjam, diqqatli, hayron, xursand, kulayotgan, jahldor, xafa, qiziquvchan, uyatchan, uyqusiragan va boshqalar.\n- **Rang.**\n\nNatijani PNG sifatida eksport qilish mumkin, kodi esa GitHub'da ochiq.\n\n## Kimga kerak\n\nAI yordamchi, Telegram bot yoki chat-vidjet yasayotganlarga. Bunday avatar botga xarakter beradi: masalan, javob tayyorlanayotganda \"o'ylayotgan\", xato bo'lganda \"xafa\" holatini ko'rsatish mumkin.\n\n## Qanday boshlash\n\n1. Saytni oching va *Customise* bo'limida shakl, kayfiyat va rangni tanlang.\n2. *Export as PNG* bilan rasmni oling yoki GitHub'dagi kodni loyihangizga moslang.\n",
+    "install": null,
+    "access": "channel"
+  },
+  {
+    "type": "resource",
+    "title": "Genery — videolar uchun kinematografik ilhom",
+    "summary": "Klip va reklamalardan kadrlar, montaj usullari va moodboard'lar: AI'da video yasashdan oldin g'oyani shu yerda yig'ing.",
+    "link_url": "https://genery.io",
+    "tags": "video, ilhom, moodboard, kinematografiya",
+    "body": "## Bu nima\n\nGenery — rejissyorlar va kontent yaratuvchilar uchun vizual ilhom platformasi. Unda musiqiy kliplar va reklamalardan olingan kadrlar, ular asosida yig'ilgan moodboard'lar hamda montaj va suratga olish usullari katalogi bor.\n\n## Usullar katalogi\n\nEng foydali qismi — texnikalar bo'yicha qidirish: match cut, aralash media, zoom, wigglegram, rang almashinuvi, birinchi shaxs (POV) kadri, pastdan olingan kadr, to'xtatilgan kadr (freeze frame), ikki karra ekspozitsiya, speed ramp va boshqalar. Har bir usulni real misollarda ko'rasiz.\n\n## AI video bilan qanday bog'liq\n\nAI video modellariga yaxshi prompt yozish uchun kadr tilini bilish kerak. \"Chiroyli video\" deb emas, \"pastdan olingan kadr, sekinlashib keyin tezlashadigan speed ramp\" deb yozsangiz, natija keskin yaxshilanadi. Genery aynan shu lug'atni o'rgatadi.\n\n## Qanday boshlash\n\n1. *Techniques* bo'limida bir usulni tanlang va misollarini ko'ring.\n2. Yoqqan kadrlarni o'z moodboard'ingizga yig'ing.\n3. Usul nomini keyingi video promptingizda ishlating.\n",
+    "install": null,
+    "access": "channel"
+  },
+  {
+    "type": "resource",
+    "title": "Geometric Shots — kino kadrlarida geometriya",
+    "summary": "Filmlar va seriallardan olingan uchburchak, simmetriya, uchdan bir qoidasi asosidagi kadrlar to'plami. Kompozitsiyani o'rganish uchun.",
+    "link_url": "https://geometricshots.tumblr.com",
+    "tags": "video, kompozitsiya, kino, ilhom",
+    "body": "## Bu nima\n\nGeometric Shots — kino va seriallardan olingan, geometrik kompozitsiyaga qurilgan kadrlar to'plami. Kadrlar teglar bo'yicha ajratilgan: uchburchak, chorak, doira, ufq nuqtasi (vanishing point), simmetriya, diagonal, ikki teng qism, uchdan bir qoidasi.\n\n## Nega foydali\n\nYaxshi kadr tasodifan chiqmaydi. Bu to'plamni ko'rib chiqsangiz, mashhur rejissyorlar tomoshabin ko'zini qanday boshqarishini tushuna boshlaysiz. Bu bilim telefonda suratga olishda ham, AI'da rasm yoki video generatsiya qilishda ham asqatadi.\n\n## AI bilan qanday ishlatish\n\nPromptga kompozitsiyani aniq yozing: \"markazda simmetrik kompozitsiya\", \"kadr uchdan bir qoidasi bo'yicha, qahramon chap chiziqda\", \"yo'l ufq nuqtasiga qarab ketadi\". Bunday aniqlik natijani ancha \"kinoga o'xshash\" qiladi.\n\n## Qanday boshlash\n\n1. Saytni oching va menyudan bitta teg tanlang.\n2. 10–15 ta kadrni ko'rib, umumiy qoidani toping.\n3. Keyingi suratga olish yoki promptingizda shu qoidani sinab ko'ring.\n\nMuallif shu kompozitsiyalar bilan suratga olish uchun kamera ilovasi ham yaratgan — havolasi saytning o'zida.\n",
+    "install": null,
+    "access": "channel"
+  },
+  {
+    "type": "resource",
+    "title": "Replicate — minglab AI modelni bulutda ishga tushirish",
+    "summary": "Rasm, video, ovoz va matn modellarini o'z serveringizsiz, brauzerda yoki API orqali sinab ko'rasiz.",
+    "link_url": "https://replicate.com/",
+    "tags": "AI, api, modellar, rasm, video",
+    "body": "## Bu nima\n\nReplicate — ochiq va tijoriy AI modellarni bulutda ishga tushirish platformasi. Rasm generatsiya qilish, videoni tahrirlash, ovozni matnga aylantirish, rasm sifatini oshirish kabi minglab model bor. Ularni brauzerda sinab ko'rish yoki o'z ilovangizga API orqali ulash mumkin.\n\n## Nega qulay\n\nKuchli AI modelini o'zingiz ishga tushirish uchun qimmat videokarta va sozlash kerak. Replicate'da esa model sahifasini ochasiz, parametrlarni kiritasiz va natijani olasiz. To'lov odatda ishlatilgan resurs uchun olinadi, oylik obuna shart emas.\n\n## Kimga kerak\n\n- Yangi chiqqan modelni birinchilardan bo'lib sinab ko'rmoqchi bo'lganlarga.\n- Telegram bot yoki ilovasiga AI imkoniyat qo'shmoqchi bo'lgan dasturchilarga.\n- Bir xil vazifa uchun bir nechta modelni solishtirmoqchi bo'lganlarga.\n\n## Qanday boshlash\n\n1. Saytda ro'yxatdan o'ting va kerakli modelni qidiring.\n2. Model sahifasida parametrlarni kiritib, natijani ko'ring.\n3. Ilovaga ulash uchun sahifadagi API namunalaridan foydalaning.\n\n## Maslahat\n\nNarxlar har bir model uchun alohida. Katta hajmda ishlatishdan oldin narxni model sahifasidan albatta tekshiring.\n",
+    "install": null,
+    "access": "channel"
+  },
+  {
+    "type": "resource",
+    "title": "Appica UI — inson uchun ham, agent uchun ham komponentlar",
+    "summary": "Base UI, Tailwind va Motion asosidagi 70 dan ortiq bepul komponent. Kamroq token sarflab, chiroyliroq interfeys.",
+    "link_url": "https://appica.dev/ui",
+    "tags": "dizayn, react, komponent, bepul",
+    "body": "## Bu nima\n\nAppica UI — React uchun bepul va ochiq kodli komponentlar kutubxonasi. U Base UI asosida qurilgan, Tailwind bilan bezatilgan va Motion bilan jonlantirilgan. 70 dan ortiq komponent bor va hammasi hamma uchun qulaylik talablariga moslashtirilgan.\n\n## Agent bilan ishlash\n\nKutubxona AI agentlar bilan ishlashni hisobga olib yaratilgan: agent tayyor komponentlarni yig'adi va sahifani noldan yozmaydi. Natijada interfeys tezroq tayyor bo'ladi, sifati yuqoriroq va token kamroq sarflanadi.\n\n## Qanday boshlash\n\n1. Saytdagi *Getting Started* bo'limini oching.\n2. *Browse Components* orqali kerakli komponentlarni ko'rib chiqing.\n3. Agentingizga \"Appica UI komponentlaridan foydalanib, oylik va yillik almashtirgichli narxlar sahifasini yig'\" kabi aniq vazifa bering.\n\n## Maslahat\n\nBir loyihada bitta kutubxonaga sodiq qoling. shadcn, HeroUI va Appica'ni aralashtirsangiz, tugmalar va bo'shliqlar bir-biriga mos kelmaydi.\n",
+    "install": null,
+    "access": "channel"
+  },
+  {
+    "type": "resource",
+    "title": "Solar Icons — 1451 ta ikonka, 6 uslubda",
+    "summary": "Bu ilovadagi ikonkalar ham shu to'plamdan. Chiziqli, to'liq, ikki rangli — bitta ikonkaning olti xil ko'rinishi.",
+    "link_url": "https://solar-icons.vercel.app/",
+    "tags": "dizayn, ikonkalar, react",
+    "body": "## Bu nima\n\nSolar — 480 Design studiyasi yaratgan ikonkalar to'plami: 1451 ta noyob ikonka, har biri 6 uslubda (Linear, Bold, Outline, Broken, Line Duotone, Bold Duotone). Zamonaviy freymvorklar uchun tayyor paketlar va AI agentlar uchun hujjatlar bor.\n\n## Biz ham ishlatamiz\n\nSiz hozir ko'rib turgan ilovadagi ikonkalar ham Solar'dan olingan. Oddiy holatdagi elementlar uchun ingichka **Linear**, tanlangan va muhim elementlar uchun to'liq **Bold** uslubidan foydalanamiz. Ikki uslubning o'zi butun interfeys uchun yetarli bo'ldi.\n\n## Nega yaxshi\n\n- Ikonkalar bir uslubda chizilgan: chiziq qalinligi va burchaklar hamma joyda bir xil.\n- Bir ikonkaning bir nechta uslubi bo'lgani uchun holatlarni (faol yoki faol emas) ko'rsatish oson.\n- Chiziq qalinligi va ranglarni sozlash mumkin.\n\n## Qanday boshlash\n\n1. Saytdagi *Explore Icons* bo'limida qidiring va uslubni tanlang.\n2. React uchun `@solar-icons/react` paketini o'rnating (buyruq pastda).\n\nIkonkalar CC BY 4.0 litsenziyasida, ya'ni tijoriy loyihada ishlatsa bo'ladi, lekin muallifni (480 Design) ko'rsatish kerak.\n",
+    "install": "npm install @solar-icons/react",
+    "access": "channel"
+  },
+  {
+    "type": "resource",
+    "title": "Google Fonts — bepul shriftlarning eng katta kutubxonasi",
+    "summary": "Minglab bepul shrift: endi ularni tilga, kayfiyatga va uslubga qarab filtrlash mumkin.",
+    "link_url": "https://fonts.google.com",
+    "tags": "dizayn, shriftlar, bepul, tipografiya",
+    "body": "## Bu nima\n\nGoogle Fonts — Google'ning bepul shriftlar kutubxonasi. Undagi barcha shriftlarni shaxsiy va tijoriy loyihalarda bemalol ishlatsa bo'ladi, saytga esa bitta havola orqali ulanadi.\n\n## Yangi filtrlar\n\nEndi shriftni nomi bo'yicha emas, xarakteri bo'yicha qidirish mumkin:\n\n- **Til va yozuv tizimi** — kerakli harflar bor-yo'qligini tekshirish uchun.\n- **Kayfiyat (Feeling)** — biznes, xotirjam, o'ynoqi, nafis, kelajakdagidek, vintaj va boshqalar.\n- **Ko'rinish (Appearance)** — monospace, marker, art deco, stencil, piksel, kalligrafiya.\n\n## Qanday boshlash\n\n1. Saytni oching va o'z matningizni preview maydoniga yozing.\n2. Filtrlardan foydalanib, 3–4 ta nomzodni tanlang.\n3. Tanlangan shriftni sayt kodiga havola bilan ulang yoki yuklab oling.\n\n## Maslahat\n\nAlbatta o'zbek lotin alifbosidagi matn bilan sinab ko'ring: \"O'zbekiston\", \"g'oya\", \"sho'rva\". Ba'zi shriftlarda tutuq belgisi (') juda kichik yoki g'alati ko'rinadi. Bu ilovada ham Google Fonts'dagi Google Sans shriftidan foydalanilgan.\n",
+    "install": null,
+    "access": "channel"
+  },
+  {
+    "type": "resource",
+    "title": "Mobbin — haqiqiy ilovalar ekranlari kutubxonasi",
+    "summary": "Mashhur iOS va veb ilovalar ro'yxatdan o'tish, to'lov yoki sozlamalarni qanday qilganini bir joyda ko'rasiz.",
+    "link_url": "https://mobbin.com/",
+    "tags": "dizayn, ux, ilhom, mobil",
+    "body": "## Bu nima\n\nMobbin — haqiqiy iOS va veb ilovalarning ekranlari va foydalanuvchi oqimlari (flow) to'plami. Bu yerda konseptlar emas, minglab foydalanuvchi har kuni ishlatayotgan mahsulotlarning ekranlari bor.\n\n## Nega kerak\n\nYangi ekran yasashdan oldin \"boshqalar buni qanday qilgan?\" degan savolga eng tez javob shu yerda. Masalan, onboarding, obuna sotib olish, profil sozlamalari yoki bo'sh holat ekranlarini o'nlab ilovada solishtirib ko'rasiz.\n\n## Qanday ishlatish\n\n1. Ilova nomi yoki ekran turi bo'yicha qidiring (masalan, *paywall* yoki *onboarding*).\n2. Bitta ilovaning to'liq oqimini boshidan oxirigacha ko'ring — alohida ekranlardan ko'ra ko'proq narsa o'rgatadi.\n3. Yoqqan ekranlarni to'plamga saqlang.\n\n## Maslahat\n\nAgentga interfeys yasatayotganda bitta yaxshi ekran skrinshotini ko'rsatib, \"shu tuzilishda, lekin mening ma'lumotlarim bilan\" deb yozing. Matnli tushuntirishdan ko'ra ancha aniq natija beradi.\n",
+    "install": null,
+    "access": "channel"
+  },
+  {
+    "type": "resource",
+    "title": "shadcn/ui — o'z komponentlar kutubxonangiz uchun poydevor",
+    "summary": "Kutubxona emas, kod: komponent loyihangizga tushadi va uni xohlagancha o'zgartirasiz. Ko'p AI vositalar shu asosda ishlaydi.",
+    "link_url": "https://ui.shadcn.com/",
+    "tags": "dizayn, shadcn, react, komponent",
+    "body": "## Bu nima\n\nshadcn/ui — React uchun komponentlar to'plami. Lekin u odatiy kutubxona emas: komponentni o'rnatganingizda uning kodi to'g'ridan-to'g'ri loyihangizga ko'chiriladi. Ya'ni kod sizniki, uni xohlagancha o'zgartirasiz va hech qanday paket yangilanishiga bog'lanib qolmaysiz.\n\n## Nega bunchalik mashhur\n\n- Komponentlar hamma uchun qulay va oqilona standart sozlamalarga ega.\n- Ko'plab boshqa resurslar shu asosda qurilgan: blocks.so, 21st.dev, tweakcn, Dot Matrix va boshqalar.\n- AI agentlar shadcn'ni yaxshi biladi, shuning uchun u bilan ishlash eng oson.\n\n## Qanday boshlash\n\n1. Saytdagi o'rnatish yo'riqnomasini o'z freymvorkingiz (Next.js, Vite va hokazo) uchun oching.\n2. CLI orqali loyihani sozlang va kerakli komponentlarni bittadan qo'shing.\n3. Brendingizga moslash uchun tweakcn'da mavzu yasang.\n\n## Maslahat\n\nStandart ko'rinishda qoldirmang: ranglar, shrift va burchaklarni o'zgartirmasangiz, saytingiz minglab boshqa saytlarga o'xshab qoladi.\n",
+    "install": null,
+    "access": "channel"
+  },
+  {
+    "type": "resource",
+    "title": "Sigma Studio — foydalanuvchi psixologiyasi va dizayn tizimi",
+    "summary": "Psixologiyaga asoslangan 100 dan ortiq UX pattern va tayyor dizayn tizimi: nega aynan shunday qilish kerakligini tushunasiz.",
+    "link_url": "https://www.thesigma.co",
+    "tags": "dizayn, ux, psixologiya, dizayn tizimi",
+    "body": "## Bu nima\n\nSigma Studio — dizaynerlar uchun mahsulotlar to'plami. Ulardan ikkitasi asosiy: dizayn tizimi (UI kit) va **User Psychology** — foydalanuvchi psixologiyasiga asoslangan 100 dan ortiq UX pattern.\n\n## Nega psixologiya muhim\n\nChiroyli interfeys hali yaxshi interfeys degani emas. Odamlar qaror qabul qilishda ma'lum qonuniyatlarga bo'ysunadi: tanlov ko'p bo'lsa adashadi, yaqin maqsadni ko'rsa harakatni davom ettiradi, birinchi ko'rgan narxni \"o'lchov\" sifatida qabul qiladi. Bu patternlarni bilsangiz, obuna sahifasi, onboarding yoki narxlar bo'limini ancha samarali qila olasiz.\n\n## Kimga kerak\n\n- Mahsulot yoki kurs sotadigan sahifa yasayotganlarga.\n- Konversiyani (tashrif buyuruvchidan mijozga aylanishni) oshirmoqchi bo'lganlarga.\n- Dizayn qarorlarini \"menga yoqdi\" bilan emas, dalil bilan asoslamoqchi bo'lganlarga.\n\n## Qanday boshlash\n\n1. Saytdagi *User Psychology* bo'limini oching.\n2. Mahsulotlar va ularning shartlarini saytdan tekshiring.\n\n## Maslahat\n\nPsixologik usullardan halol foydalaning: maqsad foydalanuvchiga to'g'ri qaror qabul qilishda yordam berish, uni aldash emas.\n",
+    "install": null,
+    "access": "channel"
+  },
+  {
+    "type": "resource",
+    "title": "Refero — AI davri uchun dizayn tadqiqoti",
+    "summary": "Haqiqiy mahsulotlarning o'n minglab ekranlari, aqlli qidiruv va MCP: agentingiz ham tayyor misollar asosida dizayn qiladi.",
+    "link_url": "https://refero.design",
+    "tags": "dizayn, ux, ilhom, mcp",
+    "body": "## Bu nima\n\nRefero — veb va iOS ilovalardagi UI/UX misollarning eng katta to'plamlaridan biri: haqiqiy mahsulotlarning o'n minglab ekranlari, foydalanuvchi oqimlari va patternlari. Qidiruv juda aniq: masalan, \"manbalarga havolali AI chat\", \"filtrli jadvallar\", \"SSO bilan kirish ekrani\" deb qidirsangiz bo'ladi.\n\n## Research mode\n\nYangi rejimda vazifangizni tasvirlaysiz, Refero esa tahlil, mos misollar va nima uchun shunday qilish kerakligini qaytaradi. Bu oddiy ilhom emas, kichik dizayn tadqiqoti.\n\n## Agent bilan\n\nRefero'ni MCP orqali AI agentingizga ulash mumkin. Shunda agent interfeys yasashdan oldin real mahsulotlardagi misollarni o'zi ko'rib chiqadi va natija \"o'ylab topilgan\" emas, isbotlangan yechimlarga asoslanadi. Figma uchun plagin ham bor.\n\n## Qanday boshlash\n\n1. Saytda kerakli ekran turini qidiring.\n2. Agent bilan ishlasangiz, *Connect MCP* bo'limidagi yo'riqnomani bajaring.\n3. Narx va tariflarni *Pricing* sahifasida tekshiring.\n",
+    "install": null,
+    "access": "channel"
+  },
+  {
+    "type": "resource",
+    "title": "Arena — AI modellarni ko'r-ko'rona solishtirish",
+    "summary": "Ikki model bir savolga javob beradi, qaysi biri ekanini bilmaysiz, eng yaxshisiga ovoz berasiz. Ommaviy reyting ham shu yerda.",
+    "link_url": "https://arena.ai/",
+    "tags": "AI, modellar, reyting, solishtirish",
+    "body": "## Bu nima\n\nArena — AI modellarni solishtirish va reytinglash platformasi. Uning asosiy g'oyasi: modellarni marketing va'dalari bo'yicha emas, haqiqiy foydalanuvchilar ovozi bo'yicha baholash. Matn, rasm va kod modellari uchun ommaviy reyting (leaderboard) shu ovozlar asosida tuziladi.\n\n## Rejimlar\n\n- **Battle** — ikki anonim model bir xil savolga javob beradi. Siz yaxshisini tanlaysiz, keyingina ularning nomi ochiladi. Bu brendga bo'lgan oldindan fikrni chetlab o'tadi.\n- **Side by side** — o'zingiz tanlagan ikki modelni yonma-yon solishtirasiz.\n- **Agent mode** — murakkab vazifalar uchun: landing sahifa, dashboard, brauzer o'yini yoki rasm asosida kod yasash.\n\n## Nega foydali\n\n\"Qaysi model yaxshi?\" degan savolga umumiy javob yo'q. Javob vazifangizga bog'liq. O'z savollaringizni Battle rejimida 5–10 marta sinab ko'rsangiz, aynan siz uchun qaysi model kuchli ekanini bilib olasiz.\n\n## Qanday boshlash\n\n1. Saytni oching va Battle rejimini tanlang.\n2. O'zingiz haqiqatan ishlatadigan savol yoki vazifani yozing.\n3. Javoblarni o'qib, ovoz bering.\n",
+    "install": null,
+    "access": "channel"
+  }
+]

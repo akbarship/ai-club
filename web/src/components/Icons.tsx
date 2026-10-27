@@ -1,0 +1,96 @@
+// Solar icon set by 480 Design (CC BY 4.0) — the same set the reference app uses.
+// Linear for neutral elements, Bold for active and accent states.
+import type { ComponentType } from 'react';
+import { HomeSmileIcon as HomeL } from '@solar-icons/react/linear/home-smile';
+import { HomeSmileIcon as HomeB } from '@solar-icons/react/bold/home-smile';
+import { CrownMinimalisticIcon as ClubL } from '@solar-icons/react/linear/crown-minimalistic';
+import { CrownMinimalisticIcon as ClubB } from '@solar-icons/react/bold/crown-minimalistic';
+import { UserIcon as UserL } from '@solar-icons/react/linear/user';
+import { UserIcon as UserB } from '@solar-icons/react/bold/user';
+import { SettingsIcon as SettingsL } from '@solar-icons/react/linear/settings';
+import { SettingsIcon as SettingsB } from '@solar-icons/react/bold/settings';
+import { LockKeyholeMinimalisticIcon as LockL } from '@solar-icons/react/linear/lock-keyhole-minimalistic';
+import { LockKeyholeMinimalisticIcon as LockB } from '@solar-icons/react/bold/lock-keyhole-minimalistic';
+import { ShareIcon as ShareL } from '@solar-icons/react/linear/share';
+import { ShareIcon as ShareB } from '@solar-icons/react/bold/share';
+import { CopyIcon as CopyL } from '@solar-icons/react/linear/copy';
+import { CopyIcon as CopyB } from '@solar-icons/react/bold/copy';
+import { CheckCircleIcon as CheckCircleL } from '@solar-icons/react/linear/check-circle';
+import { CheckCircleIcon as CheckCircleB } from '@solar-icons/react/bold/check-circle';
+import { ArrowRightIcon as ArrowRightL } from '@solar-icons/react/linear/arrow-right';
+import { ArrowRightIcon as ArrowRightB } from '@solar-icons/react/bold/arrow-right';
+import { ArrowRightUpIcon as ExternalL } from '@solar-icons/react/linear/arrow-right-up';
+import { ArrowRightUpIcon as ExternalB } from '@solar-icons/react/bold/arrow-right-up';
+import { PinIcon as PinL } from '@solar-icons/react/linear/pin';
+import { PinIcon as PinB } from '@solar-icons/react/bold/pin';
+import { UploadMinimalisticIcon as UploadL } from '@solar-icons/react/linear/upload-minimalistic';
+import { UploadMinimalisticIcon as UploadB } from '@solar-icons/react/bold/upload-minimalistic';
+import { TrashBinMinimalisticIcon as TrashL } from '@solar-icons/react/linear/trash-bin-minimalistic';
+import { TrashBinMinimalisticIcon as TrashB } from '@solar-icons/react/bold/trash-bin-minimalistic';
+import { AddCircleIcon as AddL } from '@solar-icons/react/linear/add-circle';
+import { AddCircleIcon as AddB } from '@solar-icons/react/bold/add-circle';
+import { Chart2Icon as ChartL } from '@solar-icons/react/linear/chart-2';
+import { Chart2Icon as ChartB } from '@solar-icons/react/bold/chart-2';
+import { DocumentTextIcon as DocumentL } from '@solar-icons/react/linear/document-text';
+import { DocumentTextIcon as DocumentB } from '@solar-icons/react/bold/document-text';
+import { GalleryWideIcon as GalleryL } from '@solar-icons/react/linear/gallery-wide';
+import { GalleryWideIcon as GalleryB } from '@solar-icons/react/bold/gallery-wide';
+import { KeyMinimalistic2Icon as KeyL } from '@solar-icons/react/linear/key-minimalistic-2';
+import { KeyMinimalistic2Icon as KeyB } from '@solar-icons/react/bold/key-minimalistic-2';
+import { LetterIcon as LetterL } from '@solar-icons/react/linear/letter';
+import { LetterIcon as LetterB } from '@solar-icons/react/bold/letter';
+import { UsersGroupRoundedIcon as UsersL } from '@solar-icons/react/linear/users-group-rounded';
+import { UsersGroupRoundedIcon as UsersB } from '@solar-icons/react/bold/users-group-rounded';
+import { AltArrowRightIcon as ChevronRightL } from '@solar-icons/react/linear/alt-arrow-right';
+import { AltArrowRightIcon as ChevronRightB } from '@solar-icons/react/bold/alt-arrow-right';
+import { CloseCircleIcon as CloseL } from '@solar-icons/react/linear/close-circle';
+import { CloseCircleIcon as CloseB } from '@solar-icons/react/bold/close-circle';
+import { Pen2Icon as PenL } from '@solar-icons/react/linear/pen-2';
+import { Pen2Icon as PenB } from '@solar-icons/react/bold/pen-2';
+import { RefreshIcon as RefreshL } from '@solar-icons/react/linear/refresh';
+import { RefreshIcon as RefreshB } from '@solar-icons/react/bold/refresh';
+import { LinkRoundAngleIcon as LinkL } from '@solar-icons/react/linear/link-round-angle';
+import { LinkRoundAngleIcon as LinkB } from '@solar-icons/react/bold/link-round-angle';
+import { EyeIcon as EyeL } from '@solar-icons/react/linear/eye';
+import { EyeIcon as EyeB } from '@solar-icons/react/bold/eye';
+import { SquareShareLineIcon as ChannelL } from '@solar-icons/react/linear/square-share-line';
+import { SquareShareLineIcon as ChannelB } from '@solar-icons/react/bold/square-share-line';
+
+type SolarProps = { size?: number | string; className?: string; 'aria-hidden'?: boolean };
+export type IconProps = { size?: number; bold?: boolean; className?: string };
+export type IconComponent = ComponentType<IconProps>;
+
+function pair(L: ComponentType<SolarProps>, B: ComponentType<SolarProps>): IconComponent {
+  return function Icon({ size = 22, bold, className }: IconProps) {
+    const C = bold ? B : L;
+    return <C size={size} className={className} aria-hidden />;
+  };
+}
+
+export const IconHome = pair(HomeL, HomeB);
+export const IconClub = pair(ClubL, ClubB);
+export const IconUser = pair(UserL, UserB);
+export const IconSettings = pair(SettingsL, SettingsB);
+export const IconLock = pair(LockL, LockB);
+export const IconShare = pair(ShareL, ShareB);
+export const IconCopy = pair(CopyL, CopyB);
+export const IconCheckCircle = pair(CheckCircleL, CheckCircleB);
+export const IconArrowRight = pair(ArrowRightL, ArrowRightB);
+export const IconExternal = pair(ExternalL, ExternalB);
+export const IconPin = pair(PinL, PinB);
+export const IconUpload = pair(UploadL, UploadB);
+export const IconTrash = pair(TrashL, TrashB);
+export const IconAdd = pair(AddL, AddB);
+export const IconChart = pair(ChartL, ChartB);
+export const IconDocument = pair(DocumentL, DocumentB);
+export const IconGallery = pair(GalleryL, GalleryB);
+export const IconKey = pair(KeyL, KeyB);
+export const IconLetter = pair(LetterL, LetterB);
+export const IconUsers = pair(UsersL, UsersB);
+export const IconChevronRight = pair(ChevronRightL, ChevronRightB);
+export const IconClose = pair(CloseL, CloseB);
+export const IconPen = pair(PenL, PenB);
+export const IconRefresh = pair(RefreshL, RefreshB);
+export const IconLink = pair(LinkL, LinkB);
+export const IconEye = pair(EyeL, EyeB);
+export const IconChannel = pair(ChannelL, ChannelB);
