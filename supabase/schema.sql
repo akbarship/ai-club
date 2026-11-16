@@ -48,6 +48,16 @@ CREATE TABLE IF NOT EXISTS posts (
   published_at  BIGINT
 );
 
+-- Downloadable file (a PDF in the private "files" bucket) and the channel announcement.
+ALTER TABLE posts ADD COLUMN IF NOT EXISTS file_path TEXT;              -- path inside the "files" bucket
+ALTER TABLE posts ADD COLUMN IF NOT EXISTS file_name TEXT;              -- name shown to users
+ALTER TABLE posts ADD COLUMN IF NOT EXISTS file_size BIGINT;
+ALTER TABLE posts ADD COLUMN IF NOT EXISTS file_tg_id TEXT;             -- Telegram file_id cached after the first send
+ALTER TABLE posts ADD COLUMN IF NOT EXISTS tg_post INTEGER NOT NULL DEFAULT 0;   -- announce in the channel on publish
+ALTER TABLE posts ADD COLUMN IF NOT EXISTS tg_text TEXT NOT NULL DEFAULT '';     -- Telegram HTML
+ALTER TABLE posts ADD COLUMN IF NOT EXISTS tg_message_id BIGINT;
+ALTER TABLE posts ADD COLUMN IF NOT EXISTS tg_posted_at BIGINT;
+
 CREATE TABLE IF NOT EXISTS banners (
   id            BIGSERIAL PRIMARY KEY,
   eyebrow       TEXT NOT NULL DEFAULT '',

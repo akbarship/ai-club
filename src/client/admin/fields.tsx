@@ -1,6 +1,7 @@
 import { useState, type ReactNode } from 'react';
-import { upload } from '../api';
-import { IconAdd, IconTrash, IconUpload } from '../components/Icons';
+import { upload, uploadFile } from '../api';
+import { IconAdd, IconFile, IconTrash, IconUpload } from '../components/Icons';
+import { fileSize } from '../components/PostCard';
 import { alert } from '../tg';
 import type { MsgButton } from '../types';
 
@@ -53,6 +54,59 @@ export function ImageField({ label, value, onChange }: { label: string; value: s
           </div>
         </div>
       </div>
+    </div>
+  );
+}
+
+export type FileValue = { path: string; name: string; size: number | null } | null;
+
+/** A downloadable PDF. The bot sends it to the user's chat when they tap "Yuklab olish". */
+export function FileField({ label, hint, value, onChange }: { label: string; hint?: ReactNode; value: FileValue; onChange: (v: FileValue) => void }) {
+  const [busy, setBusy] = useState(false);
+  return (
+    <div className="field">
+      <span className="field-label">{label}</span>
+      <div className="file-field">
+        {value && (
+          <div className="file-field-info">
+            <IconFile size={22} />
+            <span>
+              <span className="file-field-name">{value.name}</span>
+              <span className="field-hint">{fileSize(value.size)}</span>
+            </span>
+          </div>
+        )}
+        <div className="row-gap">
+          <span className="btn btn-secondary btn-sm file-btn">
+            <IconUpload size={17} />
+            {busy ? 'Yuklanmoqda…' : value ? 'Almashtirish' : 'PDF yuklash'}
+            <input
+              type="file"
+              accept="application/pdf,.pdf"
+              disabled={busy}
+              onChange={async (e) => {
+                const f = e.target.files?.[0];
+                if (!f) return;
+                setBusy(true);
+                try {
+                  onChange(await uploadFile(f));
+                } catch (err) {
+                  alert((err as Error).message);
+                } finally {
+                  setBusy(false);
+                  e.target.value = '';
+                }
+              }}
+            />
+          </span>
+          {value && (
+            <button type="button" className="btn btn-ghost btn-sm" onClick={() => onChange(null)}>
+              Olib tashlash
+            </button>
+          )}
+        </div>
+      </div>
+      {hint && <span className="field-hint">{hint}</span>}
     </div>
   );
 }

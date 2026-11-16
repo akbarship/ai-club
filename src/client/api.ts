@@ -26,6 +26,17 @@ export const api = {
 export const track = (type: string, ref?: string | number) =>
   api.post('/events', { type, ref: ref == null ? undefined : String(ref) }).catch(() => {});
 
+/** Uploads a PDF straight to Supabase Storage (bypasses the 4 MB API limit). */
+export async function uploadFile(file: File) {
+  const { path, signedUrl } = await api.post<{ path: string; signedUrl: string }>('/admin/file-upload-url', {
+    name: file.name,
+    size: file.size,
+  });
+  const res = await fetch(signedUrl, { method: 'PUT', headers: { 'content-type': file.type || 'application/pdf' }, body: file });
+  if (!res.ok) throw new Error(`Fayl yuklanmadi (HTTP ${res.status})`);
+  return { path, name: file.name, size: file.size };
+}
+
 export async function upload(file: File): Promise<string> {
   const fd = new FormData();
   fd.append('file', file);

@@ -18,6 +18,8 @@ This is the **Vercel + Supabase** version. The self-hosted version (Node + SQLit
 **For users (in the Mini App)**
 - Home: a banner carousel, filter chips (Qo'llanmalar / Resurslar / Skills / MCP) and a feed.
 - Guide pages written in Markdown. Resources get a link card. Skills and MCPs get a one-tap copy block for the install command.
+- **PDF downloads.** A post can carry a PDF (a guide, a book). "Yuklab olish" makes the bot send the file to the user's chat. Locked posts never send it. The file lives in a private storage bucket, and Telegram's `file_id` is cached after the first send.
+- **Sharing** uses the bot's start link (`t.me/<bot>?start=post_12`): a new reader presses /start first, then gets the post card (cover, title, summary) with an "open" button. Each post has a share button and a copy-link button.
 - **Channel gate.** Each post is `free`, `channel` (subscribers only) or `club` (club members only). Locked posts still appear in the feed as teasers. The server never sends their body, link or install command. When the user comes back from the channel, the app checks their subscription again automatically.
 - An AI Club / Kurslar page with **waitlists**. Admins get a notification in the bot every time someone joins.
 - Native Telegram controls: MainButton, BackButton, SettingsButton, haptics, theme colors, alerts and confirms, `openTelegramLink`, and share links (`t.me/<bot>?startapp=post_12`).
@@ -36,7 +38,8 @@ This is the **Vercel + Supabase** version. The self-hosted version (Node + SQLit
   - a funnel: start → opened app → subscribed → waitlist → club
   - traffic sources (start payload) with each source's open and subscribe rates
   - top posts, keyword hits, and clicks on banners and resource links
-- Posts: create, edit, publish or unpublish, and pin. Includes a Markdown preview and image upload.
+- Posts: create, edit, publish or unpublish, and pin. Includes a Markdown preview, image upload, a PDF upload (up to 50 MB, straight to Supabase Storage) and a copyable share link.
+- **Channel announcements.** Each post has a "send to the channel on publish" switch and its own post text (Telegram HTML; empty means title + summary). On the first publish the bot posts it to the channel once, with the cover as a photo and an "O'qish" button that opens the bot's start link. "O'zimga test" sends it to you first; "Qayta yuborish" posts it again.
 - Banners: color or image, CTA, a target (a post, an app page or a URL), an optional schedule and an order.
 - Keywords: a deep link you can copy, a button editor, and "send a test to me".
 - Broadcasts: pick an audience (all / subscribed / not subscribed / waitlist / club). You can send a test to yourself first, and progress is shown live. Sending is rate-limited, and users who blocked the bot get marked.
@@ -49,7 +52,7 @@ This is the **Vercel + Supabase** version. The self-hosted version (Node + SQLit
    - Project Settings → Database → Connection string → **Transaction pooler** (port 6543) → `DATABASE_URL`. Put your database password into it.
    - Project Settings → API → Project URL → `SUPABASE_URL`, and the `service_role` key → `SUPABASE_SERVICE_ROLE_KEY`.
 2. **@BotFather**: create the bot and copy the token.
-3. **Channel**: add the bot to your channel as an **administrator** (no extra rights needed).
+3. **Channel**: add the bot to your channel as an **administrator** with the **Post messages** right (needed for channel announcements).
 4. **Vercel**: Add New → Project → import `akbarship/ai-club` (branch `main`). In Environment Variables add every key from `.env.example`. Deploy, then copy the address (e.g. `https://ai-club.vercel.app`) into `WEBAPP_URL` and redeploy.
 5. **@BotFather** → Bot Settings → Configure Mini App → Enable, URL = your `WEBAPP_URL`.
 6. **Once, from your computer** (fill `.env` with the same values first):
@@ -70,7 +73,7 @@ npm run import
 npm run bot:setup
 ```
 
-`db:setup` creates the tables and the public `uploads` storage bucket. `import` adds the 36 articles as drafts. `bot:setup` points Telegram at `WEBAPP_URL/api/tg/webhook` and sets the commands and the menu button — run it again whenever `WEBAPP_URL` changes.
+`db:setup` creates the tables, the public `uploads` storage bucket (images) and the private `files` bucket (PDFs). Run it again after updating: new columns are added safely. `import` adds the 36 articles as drafts. `bot:setup` points Telegram at `WEBAPP_URL/api/tg/webhook` and sets the commands and the menu button — run it again whenever `WEBAPP_URL` changes.
 
 ### Local development
 
@@ -106,7 +109,7 @@ Posts and the Club page use Markdown.
 | --- | --- |
 | `t.me/<bot>?start=club` | Sends the reply for keyword `club` and records the source `club` |
 | `t.me/<bot>?start=instagram` | Not a keyword: sends the normal welcome and records the source `instagram` |
-| `t.me/<bot>?start=post_12` | Sends a button that opens post 12 |
+| `t.me/<bot>?start=post_12` | Sends post 12's card (cover, title, summary) with an open button; the share link for posts |
 | `t.me/<bot>?startapp=post_12` | Opens the Mini App directly on post 12 |
 | `t.me/<bot>?startapp=club` | Opens the Mini App on the Club page |
 

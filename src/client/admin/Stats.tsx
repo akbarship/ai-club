@@ -17,7 +17,7 @@ type StatsData = {
   period: Record<string, number>;
   funnel: { label: string; value: number }[];
   sources: { source: string; users: number; opened: number; subscribed: number }[];
-  topPosts: { id: number; title: string; type: PostType; views: number; uniq: number }[];
+  topPosts: { id: number; title: string; type: PostType; views: number; uniq: number; downloads: number }[];
   keywords: { keyword: string; hits: number; uniq: number }[];
   banners: { id: number; title: string; clicks: number; uniq: number }[];
   linkClicks: { id: number; title: string; clicks: number; uniq: number }[];
@@ -169,12 +169,12 @@ export function Stats() {
           <h2 className="section-title">Top materiallar <span>{data.days} kun</span></h2>
           {data.topPosts.length ? (
             <table className="table">
-              <thead><tr><th>Material</th><th>Unikal</th><th>Jami</th></tr></thead>
+              <thead><tr><th>Material</th><th>Unikal</th><th>Jami</th><th>Yuklab olgan</th></tr></thead>
               <tbody>
                 {data.topPosts.map((t) => (
                   <tr key={t.id}>
                     <td><Link to={`/admin/posts/${t.id}`}>{t.title}</Link><span className="cell-meta">{TYPE_LABEL[t.type]}</span></td>
-                    <td>{t.uniq}</td><td>{t.views}</td>
+                    <td>{t.uniq}</td><td>{t.views}</td><td>{t.downloads}</td>
                   </tr>
                 ))}
               </tbody>

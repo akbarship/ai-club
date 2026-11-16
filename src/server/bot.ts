@@ -3,7 +3,7 @@ import { config, isAdmin } from './config';
 import { getSettings, getUser, logEvent, now, one, run, upsertUser } from './db';
 import { summary } from './stats';
 import { checkSubscription, isChannelChat, setSubscribed } from './subscription';
-import { bot, sendRich, type MsgButton } from './telegram';
+import { absoluteUrl, bot, sendRich, type MsgButton } from './telegram';
 
 export { bot };
 
@@ -27,6 +27,41 @@ async function sendWelcome(ctx: Context) {
     reply_markup: await welcomeKeyboard(ctx.from!.id),
     link_preview_options: { is_disabled: true },
   });
+}
+
+type PostCard = { id: number; type: string; title: string; summary: string; cover_url: string | null; access: string };
+
+const findPost = (id: number) =>
+  one<PostCard>(
+    `SELECT id, type, title, summary, cover_url, access FROM posts WHERE id = ? AND status = 'published'`,
+    id,
+  );
+
+/** Title and summary as Telegram HTML; used for post cards and channel announcements. */
+export const postCaption = (p: { title: string; summary?: string | null }) =>
+  [`<b>${escapeHtml(p.title)}</b>`, p.summary ? escapeHtml(p.summary) : ''].filter(Boolean).join('\n\n');
+
+async function postKeyboard(userId: number, p: PostCard) {
+  const kb = new InlineKeyboard().webApp(p.type === 'guide' ? 'Maqolani ochish' : 'Ochish', appUrl(`/p/${p.id}`)).row();
+  if (p.access === 'channel' && config.channelId && !(await checkSubscription(userId))) {
+    kb.url("Kanalga obuna bo'lish", config.channelUrl).row();
+    kb.text('Obunani tekshirish', `check_sub:${p.id}`);
+  }
+  return kb;
+}
+
+/** Reply to a shared post link (t.me/<bot>?start=post_12): cover, title, summary and an open button. */
+async function sendPostCard(ctx: Context, p: PostCard) {
+  const text = postCaption(p);
+  const reply_markup = await postKeyboard(ctx.from!.id, p);
+  if (p.cover_url && text.length <= 1024) {
+    try {
+      return await ctx.replyWithPhoto(absoluteUrl(p.cover_url), { caption: text, parse_mode: 'HTML', reply_markup });
+    } catch (e) {
+      console.warn('Post cover could not be sent, falling back to text:', (e as Error).message);
+    }
+  }
+  return ctx.reply(text, { parse_mode: 'HTML', reply_markup, link_preview_options: { is_disabled: true } });
 }
 
 type Keyword = { id: number; keyword: string; response_text: string; photo_url: string | null; buttons: string };
@@ -72,13 +107,8 @@ export function registerHandlers() {
 
       const post = /^post_(\d+)$/.exec(payload);
       if (post) {
-        const p = await one('SELECT id, title FROM posts WHERE id = ? AND status = ?', Number(post[1]), 'published');
-        if (p) {
-          return ctx.reply(`<b>${escapeHtml(p.title)}</b>`, {
-            parse_mode: 'HTML',
-            reply_markup: new InlineKeyboard().webApp('Ochish', appUrl(`/p/${p.id}`)),
-          });
-        }
+        const p = await findPost(Number(post[1]));
+        if (p) return sendPostCard(ctx, p);
       }
     }
     await sendWelcome(ctx);
@@ -106,13 +136,16 @@ export function registerHandlers() {
     });
   });
 
-  bot.callbackQuery('check_sub', async (ctx) => {
+  // "check_sub" sits under the welcome message, "check_sub:12" under the card for post 12.
+  bot.callbackQuery(/^check_sub(?::(\d+))?$/, async (ctx) => {
     const ok = await checkSubscription(ctx.from.id, true);
     if (!ok) {
       return ctx.answerCallbackQuery({ text: "Siz hali kanalga obuna bo'lmagansiz.", show_alert: true });
     }
     await ctx.answerCallbackQuery({ text: 'Rahmat! Hammasi ochildi.' });
-    await ctx.editMessageReplyMarkup({ reply_markup: await welcomeKeyboard(ctx.from.id) }).catch(() => {});
+    const p = ctx.match[1] ? await findPost(Number(ctx.match[1])) : undefined;
+    const reply_markup = p ? await postKeyboard(ctx.from.id, p) : await welcomeKeyboard(ctx.from.id);
+    await ctx.editMessageReplyMarkup({ reply_markup }).catch(() => {});
   });
 
   // Plain-text keyword triggers (e.g. user types "club").

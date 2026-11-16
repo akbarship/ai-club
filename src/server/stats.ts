@@ -114,10 +114,13 @@ export async function detailed(days = 30) {
     ),
     // Event refs are text; compare as text so non-numeric refs never break a cast.
     all(
-      `SELECT p.id, p.title, p.type, COUNT(*) views, COUNT(DISTINCT e.user_id) uniq
+      `SELECT p.id, p.title, p.type, COUNT(*) views, COUNT(DISTINCT e.user_id) uniq,
+              (SELECT COUNT(DISTINCT d.user_id) FROM events d
+               WHERE d.type = 'download' AND d.ref = p.id::text AND d.created_at >= ?) downloads
        FROM events e JOIN posts p ON e.ref = p.id::text
        WHERE e.type = 'post_view' AND e.created_at >= ?
        GROUP BY p.id ORDER BY uniq DESC LIMIT 10`,
+      since,
       since,
     ),
     all(

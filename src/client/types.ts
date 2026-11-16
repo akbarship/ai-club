@@ -27,7 +27,10 @@ export type PostTeaser = {
   published_at: number | null;
   locked: 'channel' | 'club' | null;
   link_url?: string | null;
+  file: PostFile | null;
 };
+
+export type PostFile = { name: string; size: number | null };
 
 export type Post = PostTeaser & { body?: string; link_url?: string | null; install?: string | null };
 

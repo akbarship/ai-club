@@ -4,7 +4,7 @@ import { track } from '../api';
 import { haptic, openLink } from '../tg';
 import { TYPE_LABEL, type PostTeaser } from '../types';
 import { Avatar } from './Avatar';
-import { IconArrowRight, IconLink, IconLock, IconPin } from './Icons';
+import { IconArrowRight, IconFile, IconLink, IconLock, IconPin } from './Icons';
 
 const MONTHS = ['yan', 'fev', 'mar', 'apr', 'may', 'iyn', 'iyl', 'avg', 'sen', 'okt', 'noy', 'dek'];
 
@@ -22,6 +22,11 @@ export const host = (url: string) => {
   } catch {
     return url;
   }
+};
+
+export const fileSize = (bytes: number | null) => {
+  if (!bytes) return '';
+  return bytes < 1024 * 1024 ? `${Math.max(1, Math.round(bytes / 1024))} KB` : `${(bytes / 1024 / 1024).toFixed(1)} MB`;
 };
 
 export const LOCK_LABEL = { channel: 'Obunachilar uchun', club: "Club a'zolari uchun" } as const;
@@ -79,6 +84,12 @@ export function PostCard({ post }: { post: PostTeaser }) {
                   <IconLink size={15} />
                   {host(post.link_url)}
                 </button>
+              )}
+              {post.file && (
+                <Link to={to} className="chip-link" onClick={() => haptic.tap()}>
+                  <IconFile size={15} />
+                  PDF
+                </Link>
               )}
               <Link to={to} className="read-link" onClick={() => haptic.tap()}>
                 {post.type === 'guide' ? "O'qish" : "Ko'rish"}

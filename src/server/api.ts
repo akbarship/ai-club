@@ -1,7 +1,9 @@
+import { GrammyError, InputFile } from 'grammy';
 import { Hono, type Context, type Next } from 'hono';
 import { validateInitData } from './auth';
 import { audienceSize, AUDIENCES, stepBroadcast } from './broadcast';
 import { escapeHtml, notifyAdmins } from './bot';
+import { postToChannel, sendAnnouncement } from './channel';
 import { config, isAdmin } from './config';
 import {
   all,
@@ -18,8 +20,8 @@ import {
 } from './db';
 import { detailed } from './stats';
 import { checkSubscription } from './subscription';
-import { uploadImage } from './storage';
-import { botUsername, sendRich } from './telegram';
+import { createFileUpload, downloadFile, uploadImage } from './storage';
+import { bot, botUsername, sendRich } from './telegram';
 
 type Env = { Variables: { userId: number; startParam?: string } };
 export const api = new Hono<Env>();
@@ -27,7 +29,7 @@ export const api = new Hono<Env>();
 const POST_TYPES = ['guide', 'resource', 'skill', 'mcp'];
 const ACCESS = ['free', 'channel', 'club'];
 const PRODUCTS = ['club', 'course'];
-const CLIENT_EVENTS = ['banner_click', 'link_click', 'share', 'copy_install'];
+const CLIENT_EVENTS = ['banner_click', 'link_click', 'share', 'copy_install', 'copy_link'];
 
 // ---------- auth ----------
 
@@ -88,6 +90,8 @@ const teaser = (p: Row, v: Viewer) => {
   locked,
   // Never reveal where a locked resource points.
   link_url: locked ? null : p.link_url,
+  // Only the name and size: the file itself is sent by the bot.
+  file: p.file_path ? { name: p.file_name, size: p.file_size } : null,
   };
 };
 
@@ -159,6 +163,41 @@ api.get('/posts/:id', async (c) => {
   return c.json({ ...t, body: p.body, link_url: p.link_url, install: p.install });
 });
 
+/** Sends the post's file to the user's chat, reusing Telegram's file_id after the first upload. */
+async function sendPostFile(userId: number, p: Row) {
+  const caption = `<b>${escapeHtml(p.title)}</b>`;
+  if (p.file_tg_id) {
+    try {
+      await bot.api.sendDocument(userId, p.file_tg_id, { caption, parse_mode: 'HTML' });
+      return;
+    } catch (e) {
+      // A stale file_id (e.g. a new bot token) is re-uploaded below; anything else is a real failure.
+      if (!(e instanceof GrammyError && e.error_code === 400 && /file/i.test(e.description))) throw e;
+    }
+  }
+  const data = await downloadFile(p.file_path);
+  const msg = await bot.api.sendDocument(userId, new InputFile(data, p.file_name || 'file.pdf'), { caption, parse_mode: 'HTML' });
+  if (msg.document) await run('UPDATE posts SET file_tg_id = ? WHERE id = ?', msg.document.file_id, p.id);
+}
+
+api.post('/posts/:id/download', async (c) => {
+  const v = await viewer(c);
+  const p = await one('SELECT * FROM posts WHERE id = ?', Number(c.req.param('id')) || 0);
+  if (!p || !p.file_path || (p.status !== 'published' && !v.admin)) return c.json({ error: 'not_found' }, 404);
+  if (lockOf(p, v)) return c.json({ error: 'locked' }, 403);
+  try {
+    await sendPostFile(v.id, p);
+  } catch (e) {
+    // The user never pressed /start or blocked the bot, so it cannot write to them.
+    if (e instanceof GrammyError && (e.error_code === 403 || /chat not found/i.test(e.description))) {
+      return c.json({ error: 'bot_blocked' }, 409);
+    }
+    throw e;
+  }
+  await logEvent(v.id, 'download', String(p.id));
+  return c.json({ ok: true });
+});
+
 api.post('/events', async (c) => {
   const { type, ref } = await c.req.json<{ type: string; ref?: string }>();
   if (!CLIENT_EVENTS.includes(type)) return c.json({ error: 'bad_event' }, 400);
@@ -222,8 +261,25 @@ const postFields = (b: Row) => {
     access: ACCESS.includes(b.access) ? b.access : 'channel',
     status: b.status === 'published' ? 'published' : 'draft',
     pinned: b.pinned ? 1 : 0,
+    file_path: b.file_path || null,
+    file_name: b.file_path ? String(b.file_name || 'file.pdf').slice(0, 120) : null,
+    file_size: b.file_path ? Number(b.file_size) || null : null,
+    tg_post: b.tg_post ? 1 : 0,
+    tg_text: String(b.tg_text ?? ''),
   };
 };
+
+/** Announces a just-published post in the channel once. Returns an error message instead of failing the save. */
+async function announceIfNeeded(id: number): Promise<string | undefined> {
+  const p = await one('SELECT * FROM posts WHERE id = ?', id);
+  if (!p || p.status !== 'published' || !p.tg_post || p.tg_posted_at) return;
+  try {
+    await postToChannel(p);
+  } catch (e) {
+    console.error('Channel post failed:', e);
+    return (e as Error).message;
+  }
+}
 
 admin.get('/posts', async (c) =>
   c.json(
@@ -242,12 +298,15 @@ admin.post('/posts', async (c) => {
   const f = postFields(await c.req.json());
   const t = now();
   const r = await run(
-    `INSERT INTO posts (type, title, summary, body, cover_url, link_url, install, tags, access, status, pinned, created_at, updated_at, published_at)
-     VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?) RETURNING id`,
-    f.type, f.title, f.summary, f.body, f.cover_url, f.link_url, f.install, f.tags, f.access, f.status, f.pinned, t, t,
+    `INSERT INTO posts (type, title, summary, body, cover_url, link_url, install, tags, access, status, pinned,
+       file_path, file_name, file_size, tg_post, tg_text, created_at, updated_at, published_at)
+     VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?) RETURNING id`,
+    f.type, f.title, f.summary, f.body, f.cover_url, f.link_url, f.install, f.tags, f.access, f.status, f.pinned,
+    f.file_path, f.file_name, f.file_size, f.tg_post, f.tg_text, t, t,
     f.status === 'published' ? t : null,
   );
-  return c.json({ id: r.rows[0].id });
+  const id = r.rows[0].id;
+  return c.json({ id, channelError: await announceIfNeeded(id) });
 });
 admin.put('/posts/:id', async (c) => {
   const id = Number(c.req.param('id'));
@@ -255,16 +314,41 @@ admin.put('/posts/:id', async (c) => {
   await run(
     `UPDATE posts SET type = ?, title = ?, summary = ?, body = ?, cover_url = ?, link_url = ?, install = ?, tags = ?,
        access = ?, status = ?, pinned = ?, updated_at = ?,
-       published_at = CASE WHEN ?::text = 'published' THEN COALESCE(published_at, ?::bigint) ELSE published_at END
+       published_at = CASE WHEN ?::text = 'published' THEN COALESCE(published_at, ?::bigint) ELSE published_at END,
+       file_tg_id = CASE WHEN file_path IS DISTINCT FROM ?::text THEN NULL ELSE file_tg_id END,
+       file_path = ?, file_name = ?, file_size = ?, tg_post = ?, tg_text = ?
      WHERE id = ?`,
     f.type, f.title, f.summary, f.body, f.cover_url, f.link_url, f.install, f.tags, f.access, f.status, f.pinned, now(),
-    f.status, now(), id,
+    f.status, now(), f.file_path, f.file_path, f.file_name, f.file_size, f.tg_post, f.tg_text, id,
   );
-  return c.json({ id });
+  return c.json({ id, channelError: await announceIfNeeded(id) });
 });
 admin.delete('/posts/:id', async (c) => {
   await run('DELETE FROM posts WHERE id = ?', Number(c.req.param('id')));
   return c.json({ ok: true });
+});
+// The saved channel announcement, sent to the admin's own chat.
+admin.post('/posts/:id/tg-test', async (c) => {
+  const p = await one('SELECT * FROM posts WHERE id = ?', Number(c.req.param('id')) || 0);
+  if (!p) return c.json({ error: 'not_found' }, 404);
+  try {
+    await sendAnnouncement(c.get('userId'), p);
+    return c.json({ ok: true });
+  } catch (e) {
+    return c.json({ error: (e as Error).message }, 400);
+  }
+});
+// Posts to the channel now, even if it was posted before.
+admin.post('/posts/:id/tg-post', async (c) => {
+  const p = await one('SELECT * FROM posts WHERE id = ?', Number(c.req.param('id')) || 0);
+  if (!p) return c.json({ error: 'not_found' }, 404);
+  if (p.status !== 'published') return c.json({ error: 'Avval materialni chop eting' }, 400);
+  try {
+    await postToChannel(p);
+    return c.json(await one('SELECT tg_message_id, tg_posted_at FROM posts WHERE id = ?', p.id));
+  } catch (e) {
+    return c.json({ error: (e as Error).message }, 400);
+  }
 });
 
 // banners
@@ -439,6 +523,16 @@ admin.post('/upload', async (c) => {
   if (!(file instanceof File)) return c.json({ error: 'Fayl topilmadi' }, 400);
   try {
     return c.json({ url: await uploadImage(file) });
+  } catch (e) {
+    return c.json({ error: (e as Error).message }, 400);
+  }
+});
+
+// Files (PDF) go from the browser straight to Supabase Storage with a signed URL.
+admin.post('/file-upload-url', async (c) => {
+  const b = await c.req.json<{ name?: string; size?: number }>();
+  try {
+    return c.json(await createFileUpload(String(b.name ?? ''), Number(b.size)));
   } catch (e) {
     return c.json({ error: (e as Error).message }, 400);
   }

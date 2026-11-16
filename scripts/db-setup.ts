@@ -24,6 +24,19 @@ if (config.supabaseUrl && config.supabaseKey) {
     if (error) throw new Error(`Bucket yaratilmadi: ${error.message}`);
     console.log(`Storage bucket "${config.storageBucket}" yaratildi (ochiq).`);
   }
+
+  const files = await storage.getBucket(config.filesBucket);
+  if (files.data) {
+    console.log(`Storage bucket "${config.filesBucket}" allaqachon bor.`);
+  } else {
+    const { error } = await storage.createBucket(config.filesBucket, {
+      public: false,
+      fileSizeLimit: '50MB',
+      allowedMimeTypes: ['application/pdf'],
+    });
+    if (error) throw new Error(`Bucket yaratilmadi: ${error.message}`);
+    console.log(`Storage bucket "${config.filesBucket}" yaratildi (yopiq, PDF uchun).`);
+  }
 } else {
   console.warn('SUPABASE_URL yoki SUPABASE_SERVICE_ROLE_KEY yo\'q: rasm yuklash uchun bucket yaratilmadi.');
 }

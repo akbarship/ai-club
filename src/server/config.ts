@@ -21,6 +21,8 @@ export const config = {
   supabaseUrl: (env.SUPABASE_URL ?? '').replace(/\/$/, ''),
   supabaseKey: env.SUPABASE_SERVICE_ROLE_KEY ?? '',
   storageBucket: 'uploads',
+  /** Private bucket for downloadable files (PDFs); only the server reads it. */
+  filesBucket: 'files',
   tzOffsetHours: Number(env.TZ_OFFSET_HOURS ?? 5),
   devUserId: Number(env.DEV_USER_ID) || 0,
   isProd: env.NODE_ENV === 'production',

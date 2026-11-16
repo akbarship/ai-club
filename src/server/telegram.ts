@@ -14,6 +14,11 @@ export async function botUsername(): Promise<string> {
   return bot.isInited() ? bot.botInfo.username : '';
 }
 
+/** Share link for a post: opens the bot first (/start), which then offers to open the post. */
+export async function postStartLink(postId: number) {
+  return `https://t.me/${await botUsername()}?start=post_${postId}`;
+}
+
 export type MsgButton = { text: string; type: 'app' | 'url' | 'channel'; value?: string };
 
 /** Builds an inline keyboard from admin-defined buttons (one button per row). */

@@ -31,3 +31,27 @@ export async function uploadImage(file: File): Promise<string> {
   if (error) throw new Error(error.message);
   return bucket.getPublicUrl(name).data.publicUrl;
 }
+
+/** Telegram bots can upload documents up to 50 MB. */
+export const MAX_FILE_BYTES = 50 * 1024 * 1024;
+
+/**
+ * Files skip Vercel's body limit: the admin's browser uploads straight to Supabase
+ * with a one-time signed URL. Returns the storage path to save on the post.
+ */
+export async function createFileUpload(fileName: string, size: number) {
+  if (!/\.pdf$/i.test(fileName)) throw new Error('Faqat PDF fayl');
+  if (!(size > 0) || size > MAX_FILE_BYTES) throw new Error('Fayl 50 MB dan katta');
+  if (!config.supabaseUrl || !config.supabaseKey) throw new Error('SUPABASE_URL va SUPABASE_SERVICE_ROLE_KEY sozlanmagan');
+
+  const path = `${Date.now().toString(36)}-${randomBytes(4).toString('hex')}.pdf`;
+  const { data, error } = await storageClient().storage.from(config.filesBucket).createSignedUploadUrl(path);
+  if (error) throw new Error(error.message);
+  return { path, signedUrl: data.signedUrl };
+}
+
+export async function downloadFile(path: string): Promise<Buffer> {
+  const { data, error } = await storageClient().storage.from(config.filesBucket).download(path);
+  if (error) throw new Error(error.message);
+  return Buffer.from(await data.arrayBuffer());
+}

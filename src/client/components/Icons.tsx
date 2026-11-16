@@ -55,6 +55,10 @@ import { EyeIcon as EyeL } from '@solar-icons/react/linear/eye';
 import { EyeIcon as EyeB } from '@solar-icons/react/bold/eye';
 import { SquareShareLineIcon as ChannelL } from '@solar-icons/react/linear/square-share-line';
 import { SquareShareLineIcon as ChannelB } from '@solar-icons/react/bold/square-share-line';
+import { DownloadMinimalisticIcon as DownloadL } from '@solar-icons/react/linear/download-minimalistic';
+import { DownloadMinimalisticIcon as DownloadB } from '@solar-icons/react/bold/download-minimalistic';
+import { FileTextIcon as FileL } from '@solar-icons/react/linear/file-text';
+import { FileTextIcon as FileB } from '@solar-icons/react/bold/file-text';
 
 type SolarProps = { size?: number | string; className?: string; 'aria-hidden'?: boolean };
 export type IconProps = { size?: number; bold?: boolean; className?: string };
@@ -94,3 +98,5 @@ export const IconRefresh = pair(RefreshL, RefreshB);
 export const IconLink = pair(LinkL, LinkB);
 export const IconEye = pair(EyeL, EyeB);
 export const IconChannel = pair(ChannelL, ChannelB);
+export const IconDownload = pair(DownloadL, DownloadB);
+export const IconFile = pair(FileL, FileB);
